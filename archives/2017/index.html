@@ -51,10 +51,32 @@
 
 
   
+  
+  <div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://images.unsplash.com/photo-1464306208223-e0b4495a5553?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=&bg=".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
 
 
 <header id="allheader" class="site-header" role="banner" 
-   >
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -98,7 +120,7 @@
       <div id="content" class="outer">
         
           <section id="main">
-  <div class="archives-tags-wrap"><blockquote><span>嗯，目前共计2篇文章</span></blockquote>
+  <div class="archives-tags-wrap"><blockquote><span>嗯，目前共计3篇文章</span></blockquote>
 
 
 
@@ -121,13 +143,13 @@
   <div class="archive-article-inner">
     <header class="archive-article-header">
 
-      <a href="/2017/07/13/hello-world/" class="archive-article-date">
-		  <time datetime="2017-07-13T12:27:20.435Z" itemprop="datePublished">7月 13, 2017</time>
+      <a href="/2017/07/13/01-word2vec-based-on-gensim/" class="archive-article-date">
+		  <time datetime="2017-07-13T07:30:16.000Z" itemprop="datePublished">7月 13, 2017</time>
 	  </a>
       
   
     <h1 class="thumb" itemprop="name">
-      <a class="archive-article-title" href="/2017/07/13/hello-world/">Hello World</a>
+      <a class="archive-article-title" href="/2017/07/13/01-word2vec-based-on-gensim/">基于gensim的Wiki百科中文word2vec训练</a>
     </h1>
   
 
@@ -141,13 +163,33 @@
   <div class="archive-article-inner">
     <header class="archive-article-header">
 
-      <a href="/2017/07/13/01-word2vec-based-on-gensim/" class="archive-article-date">
-		  <time datetime="2017-07-13T07:30:16.000Z" itemprop="datePublished">7月 13, 2017</time>
+      <a href="/2017/07/12/02-opencc-tools/" class="archive-article-date">
+		  <time datetime="2017-07-12T07:30:16.000Z" itemprop="datePublished">7月 12, 2017</time>
 	  </a>
       
   
     <h1 class="thumb" itemprop="name">
-      <a class="archive-article-title" href="/2017/07/13/01-word2vec-based-on-gensim/">基于gensim的Wiki百科中文word2vec训练</a>
+      <a class="archive-article-title" href="/2017/07/12/02-opencc-tools/">OpenCC - 简体繁体转换</a>
+    </h1>
+  
+
+    </header>
+  </div>
+</article>
+	
+		
+		
+		<article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+
+      <a href="/2017/07/10/03-hitltp-tools/" class="archive-article-date">
+		  <time datetime="2017-07-10T07:30:16.000Z" itemprop="datePublished">7月 10, 2017</time>
+	  </a>
+      
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="archive-article-title" href="/2017/07/10/03-hitltp-tools/">pyltp - 哈工大语言云python接口使用说明</a>
     </h1>
   
 
@@ -261,7 +303,7 @@
               <div class="widget-entry-summary" style="margin: 0;">
             
 
-              <h6 style="margin: 0;"><a href="/2017/07/13/hello-world/">Hello World</a></h6>
+              <h6 style="margin: 0;"><a href="/2017/07/13/01-word2vec-based-on-gensim/">基于gensim的Wiki百科中文word2vec训练</a></h6>
               <span>七月 13, 2017</span>
             </div>
 
@@ -273,8 +315,20 @@
               <div class="widget-entry-summary" style="margin: 0;">
             
 
-              <h6 style="margin: 0;"><a href="/2017/07/13/01-word2vec-based-on-gensim/">基于gensim的Wiki百科中文word2vec训练</a></h6>
-              <span>七月 13, 2017</span>
+              <h6 style="margin: 0;"><a href="/2017/07/12/02-opencc-tools/">OpenCC - 简体繁体转换</a></h6>
+              <span>七月 12, 2017</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
+              <h6 style="margin: 0;"><a href="/2017/07/10/03-hitltp-tools/">pyltp - 哈工大语言云python接口使用说明</a></h6>
+              <span>七月 10, 2017</span>
             </div>
 
           </li>
@@ -288,7 +342,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">分类</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/自然语言处理/">自然语言处理</a><span class="category-list-count">1</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/自然语言处理/">自然语言处理</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/辅助工具/">辅助工具</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/辅助工具/自然语言处理/">自然语言处理</a><span class="category-list-count">1</span></li></ul></li></ul>
     </div>
   </div>
 
@@ -298,7 +352,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/gensim/">gensim</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wiki/">wiki</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/word2vec/">word2vec</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/gensim/">gensim</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ltp/">ltp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/opencc/">opencc</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wiki/">wiki</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/word2vec/">word2vec</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言云/">语言云</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -308,7 +362,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/gensim/" style="font-size: 10px;">gensim</a> <a href="/tags/wiki/" style="font-size: 10px;">wiki</a> <a href="/tags/word2vec/" style="font-size: 10px;">word2vec</a>
+      <a href="/tags/gensim/" style="font-size: 10px;">gensim</a> <a href="/tags/ltp/" style="font-size: 10px;">ltp</a> <a href="/tags/opencc/" style="font-size: 10px;">opencc</a> <a href="/tags/wiki/" style="font-size: 20px;">wiki</a> <a href="/tags/word2vec/" style="font-size: 10px;">word2vec</a> <a href="/tags/语言云/" style="font-size: 10px;">语言云</a>
     </div>
   </div>
 
@@ -318,7 +372,7 @@
     <h3 class="widget-title">归档</h3>
 
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">2</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -373,6 +427,9 @@
 
 
     <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
     
     
 </script>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>pyltp - 哈工大语言云python接口使用说明 | League of Data</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="ltp语言云" />
+  
+  
+  
+  
+  <meta name="description" content="pyltp安装及模型下载可以使用pip直接安装，如果安装失败，建议下载源码进行手动编译。1pip install pyltp 安装pyltp后，下载模型文件，百度云地址在这。我下载的是ltp-data-v3.3.1.tar.bz2。然后将下载到的模型解压，存放在任意地方。注意：版本对应  pyltp版本：0.1.9 LTP版本：3.3.2 模型版本：3.3.1">
+<meta name="keywords" content="ltp,语言云">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pyltp - 哈工大语言云python接口使用说明">
+<meta property="og:url" content="http://yoursite.com/2017/07/10/03-hitltp-tools/index.html">
+<meta property="og:site_name" content="League of Data">
+<meta property="og:description" content="pyltp安装及模型下载可以使用pip直接安装，如果安装失败，建议下载源码进行手动编译。1pip install pyltp 安装pyltp后，下载模型文件，百度云地址在这。我下载的是ltp-data-v3.3.1.tar.bz2。然后将下载到的模型解压，存放在任意地方。注意：版本对应  pyltp版本：0.1.9 LTP版本：3.3.2 模型版本：3.3.1">
+<meta property="og:updated_time" content="2017-07-13T15:58:05.564Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="pyltp - 哈工大语言云python接口使用说明">
+<meta name="twitter:description" content="pyltp安装及模型下载可以使用pip直接安装，如果安装失败，建议下载源码进行手动编译。1pip install pyltp 安装pyltp后，下载模型文件，百度云地址在这。我下载的是ltp-data-v3.3.1.tar.bz2。然后将下载到的模型解压，存放在任意地方。注意：版本对应  pyltp版本：0.1.9 LTP版本：3.3.2 模型版本：3.3.1">
+  
+    <link rel="alternate" href="/atom.xml" title="League of Data" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://images.unsplash.com/photo-1464306208223-e0b4495a5553?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=&bg=".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" title="League of Data" rel="home"> League of Data </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">首页</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">归档</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">分类</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">标签</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">关于</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-03-hitltp-tools" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      pyltp - 哈工大语言云python接口使用说明
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2017/07/10/03-hitltp-tools/" class="article-date">
+	  <time datetime="2017-07-10T07:30:16.000Z" itemprop="datePublished">七月 10, 2017</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/辅助工具/">辅助工具</a>, <a class="article-category-link" href="/categories/辅助工具/自然语言处理/">自然语言处理</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="pyltp安装及模型下载"><a href="#pyltp安装及模型下载" class="headerlink" title="pyltp安装及模型下载"></a>pyltp安装及模型下载</h1><p>可以使用pip直接安装，如果安装失败，建议下载源码进行手动编译。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install pyltp</div></pre></td></tr></table></figure></p>
+<p>安装pyltp后，下载模型文件，百度云地址在<a href="http://pan.baidu.com/share/link?shareid=1988562907&amp;uk=2738088569}" target="_blank" rel="external">这</a>。<br>我下载的是ltp-data-v3.3.1.tar.bz2。然后将下载到的模型解压，存放在任意地方。<br>注意：版本对应</p>
+<ul>
+<li>pyltp版本：0.1.9</li>
+<li>LTP版本：3.3.2</li>
+<li>模型版本：3.3.1</li>
+</ul>
+<a id="more"></a>
+<p>上面两步都完成后，我们就可以使用pyltp进行一些文本操作了，例如：分句，分词，词性标注，命名实体识别以及依存句法等。</p>
+<h1 id="pyltp语言云的使用"><a href="#pyltp语言云的使用" class="headerlink" title="pyltp语言云的使用"></a>pyltp语言云的使用</h1><h2 id="分句-SentenceSplitter"><a href="#分句-SentenceSplitter" class="headerlink" title="分句 - SentenceSplitter"></a>分句 - SentenceSplitter</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">from pyltp import SentenceSplitter</div><div class="line">sentence = SentenceSplitter.split(&apos;我是逗号，我是句号。我是问号？我是感叹号！&apos;)</div><div class="line">print &apos;\n&apos;.join(sentence)</div></pre></td></tr></table></figure>
+<p>分句结果如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">我是逗号，我是句号。</div><div class="line">我是问号？</div><div class="line">我是感叹号！</div></pre></td></tr></table></figure></p>
+<h2 id="分词-Segmentor"><a href="#分词-Segmentor" class="headerlink" title="分词 - Segmentor"></a>分词 - Segmentor</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">import os</div><div class="line">LTP_DATA_DIR = &apos;/path/to/your/ltp_data&apos;  # ltp模型目录的路径</div><div class="line">cws_model_path = os.path.join(LTP_DATA_DIR, &apos;cws.model&apos;)  # 分词模型路径，模型名称为`cws.model`</div><div class="line"></div><div class="line">from pyltp import Segmentor</div><div class="line">segmentor = Segmentor()  # 初始化实例</div><div class="line">segmentor.load(cws_model_path)  # 加载模型</div><div class="line">words = segmentor.segment(&apos;欧几里得是西元前三世纪的希腊数学家。&apos;)  # 分词</div><div class="line">print &apos; &apos;.join(words)</div><div class="line">segmentor.release()  # 释放模型</div></pre></td></tr></table></figure>
+<p>分词结果如下，【欧几里得】被拆成了四个单独的字。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">欧 几 里 得 是 西元前 三 世纪 的 希腊 数学家 。</div></pre></td></tr></table></figure></p>
+<p>pyltp分词支持用户使用自定义词典。分词外部词典本身是一个文本文件，每行指定一个词，编码须为 UTF-8，样例如下所示:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">欧几里得</div><div class="line">亚里士多德</div></pre></td></tr></table></figure></p>
+<p>使用自定义词典进行分词的模型加载方式如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">segmentor = Segmentor()  # 初始化实例</div><div class="line">segmentor.load_with_lexicon(cws_model_path, &apos;/path/to/your/lexicon&apos;) # 加载模型，参数lexicon是自定义词典的文件路径</div><div class="line">words = segmentor.segment(&apos;欧几里得是西元前三世纪的希腊数学家。&apos;)</div><div class="line">print &apos; &apos;.join(words)</div><div class="line">segmentor.release()</div></pre></td></tr></table></figure></p>
+<p>自定义词典，分词结果如下，分词效果明显得到改善。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">欧几里得 是 西元前 三 世纪 的 希腊 数学家 。</div></pre></td></tr></table></figure></p>
+<h2 id="词性标注-Postagger"><a href="#词性标注-Postagger" class="headerlink" title="词性标注 - Postagger"></a>词性标注 - Postagger</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">pos_model_path = os.path.join(LTP_DATA_DIR, &apos;pos.model&apos;)  # 词性标注模型路径，模型名称为`pos.model`</div><div class="line"></div><div class="line">from pyltp import Postagger</div><div class="line">postagger = Postagger() # 初始化实例</div><div class="line">postagger.load(pos_model_path)  # 加载模型</div><div class="line"></div><div class="line">words = [&apos;欧几里得&apos;, &apos;是&apos;, &apos;西元前&apos;, &apos;三&apos;, &apos;世纪&apos;, &apos;的&apos;, &apos;希腊&apos;, &apos;数学家&apos;, &apos;。&apos;]</div><div class="line">postags = postagger.postag(words)  # 词性标注</div><div class="line"></div><div class="line">print &apos; &apos;.join(postags)</div><div class="line">postagger.release()  # 释放模型</div></pre></td></tr></table></figure>
+<p>词性标注结果如下，如果想了解更多的词性含义。请参考<a href="http://www.ltp-cloud.com/intro/#pos_how" target="_blank" rel="external">语言云词性标注简介</a>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">nh v nt m n u ns n wp</div><div class="line"># 欧几里得 - nh - 人名</div><div class="line"># 是 - v - 动词</div><div class="line"># 西元前 - nt - 时间名词</div><div class="line"># 三 - m - 数字</div><div class="line"># 世纪 - n - 普通名词</div><div class="line"># 的 - u - 助词</div><div class="line"># 希腊 - ns - 地理名词</div><div class="line"># 数学家- n - 普通名词</div><div class="line"># 。 - wp - 标点符号</div></pre></td></tr></table></figure></p>
+<h2 id="命名实体识别-NamedEntityRecognizer"><a href="#命名实体识别-NamedEntityRecognizer" class="headerlink" title="命名实体识别 - NamedEntityRecognizer"></a>命名实体识别 - NamedEntityRecognizer</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">ner_model_path = os.path.join(LTP_DATA_DIR, &apos;ner.model&apos;)  # 命名实体识别模型路径，模型名称为`ner.model`</div><div class="line"></div><div class="line">from pyltp import NamedEntityRecognizer</div><div class="line">recognizer = NamedEntityRecognizer() # 初始化实例</div><div class="line">recognizer.load(ner_model_path)  # 加载模型</div><div class="line"></div><div class="line">words = [&apos;欧几里得&apos;, &apos;是&apos;, &apos;西元前&apos;, &apos;三&apos;, &apos;世纪&apos;, &apos;的&apos;, &apos;希腊&apos;, &apos;数学家&apos;, &apos;。&apos;]</div><div class="line">postags = [&apos;nh&apos;, &apos;v&apos;, &apos;nt&apos;, &apos;m&apos;, &apos;n&apos;, &apos;u&apos;, &apos;ns&apos;, &apos;n&apos;, &apos;wp&apos;]</div><div class="line">nertags = recognizer.recognize(words, postags)  # 命名实体识别</div><div class="line"></div><div class="line">print &apos; &apos;.join(nertags)</div><div class="line">recognizer.release()  # 释放模型</div></pre></td></tr></table></figure>
+<p>命名实体结果如下，ltp命名实体类型为：人名（Nh），地名（NS），机构名（Ni）；ltp采用BIESO标注体系。B表示实体开始词，I表示实体中间词，E表示实体结束词，S表示单独成实体，O表示不构成实体。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">S-Nh O O O O O S-Ns O O</div><div class="line"># 欧几里得 - S-Nh - 人名</div><div class="line"># 希腊 - S-Ns - 地名</div></pre></td></tr></table></figure></p>
+<h2 id="依存句法分析-Parser"><a href="#依存句法分析-Parser" class="headerlink" title="依存句法分析 - Parser"></a>依存句法分析 - Parser</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">par_model_path = os.path.join(LTP_DATA_DIR, &apos;parser.model&apos;)  # 依存句法分析模型路径，模型名称为`parser.model`</div><div class="line"></div><div class="line">from pyltp import Parser</div><div class="line">parser = Parser() # 初始化实例</div><div class="line">parser.load(par_model_path)  # 加载模型</div><div class="line"></div><div class="line">words = [&apos;欧几里得&apos;, &apos;是&apos;, &apos;西元前&apos;, &apos;三&apos;, &apos;世纪&apos;, &apos;的&apos;, &apos;希腊&apos;, &apos;数学家&apos;, &apos;。&apos;]</div><div class="line">postags = [&apos;nh&apos;, &apos;v&apos;, &apos;nt&apos;, &apos;m&apos;, &apos;n&apos;, &apos;u&apos;, &apos;ns&apos;, &apos;n&apos;, &apos;wp&apos;]</div><div class="line">arcs = parser.parse(words, postags)  # 句法分析</div><div class="line"></div><div class="line">rely_id = [arc.head for arc in arcs]    # 提取依存父节点id</div><div class="line">relation = [arc.relation for arc in arcs]   # 提取依存关系</div><div class="line">heads = [&apos;Root&apos; if id == 0 else words[id-1] for id in rely_id]  # 匹配依存父节点词语</div><div class="line"></div><div class="line">for i in range(len(words)):</div><div class="line">    print relation[i] + &apos;(&apos; + words[i] + &apos;, &apos; + heads[i] + &apos;)&apos;</div><div class="line"></div><div class="line">parser.release()  # 释放模型</div></pre></td></tr></table></figure>
+<p>依存句法分析，输出结果如下，关于依存句法分析，详细参照<a href="http://www.ltp-cloud.com/intro/#dp_how" target="_blank" rel="external">语言云依存句法简介</a>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">SBV(欧几里得, 是)</div><div class="line">HED(是, Root)</div><div class="line">ATT(西元前, 世纪)</div><div class="line">ATT(三, 世纪)</div><div class="line">ATT(世纪, 数学家)</div><div class="line">RAD(的, 世纪)</div><div class="line">ATT(希腊, 数学家)</div><div class="line">VOB(数学家, 是)</div><div class="line">WP(。, 是)</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/辅助工具/">辅助工具</a>, <a class="article-category-link" href="/categories/辅助工具/自然语言处理/">自然语言处理</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ltp/">ltp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/语言云/">语言云</a></li></ul>
+
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/07/12/02-opencc-tools/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          OpenCC - 简体繁体转换
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#pyltp安装及模型下载"><span class="nav-number">1.</span> <span class="nav-text">pyltp安装及模型下载</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pyltp语言云的使用"><span class="nav-number">2.</span> <span class="nav-text">pyltp语言云的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分句-SentenceSplitter"><span class="nav-number">2.1.</span> <span class="nav-text">分句 - SentenceSplitter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分词-Segmentor"><span class="nav-number">2.2.</span> <span class="nav-text">分词 - Segmentor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#词性标注-Postagger"><span class="nav-number">2.3.</span> <span class="nav-text">词性标注 - Postagger</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命名实体识别-NamedEntityRecognizer"><span class="nav-number">2.4.</span> <span class="nav-text">命名实体识别 - NamedEntityRecognizer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#依存句法分析-Parser"><span class="nav-number">2.5.</span> <span class="nav-text">依存句法分析 - Parser</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2017 League of Data All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>
