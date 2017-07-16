@@ -6,22 +6,24 @@
   <title>基于gensim的Wiki百科中文word2vec训练 | League of Data</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="gensimword2vecwiki" />
+  <meta name="keywords" content="wikigensimword2vec" />
   
   
   
   
-  <meta name="description" content="Word2Vec简介Word2Vec是词（Word）的一种表示方式。不同于one-hot vector，word2vec可以通过计算各个词之间的距离，来表示词与词之间的相似度。word2vec提取了更多的特征，它使得具有相同上下文语义的词尽可能离得近一些，而不太相关的词尽可能离得较远一些。例如，【腾讯】和【网易】两个词向量将会离得很近，同理【宝马】和【保时捷】两个词向量将会离得很近。而【腾讯】和【">
-<meta name="keywords" content="gensim,word2vec,wiki">
+  <meta name="description" content="Word2Vec简介Word2Vec是词（Word）的一种表示方式。不同于one-hot vector，word2vec可以通过计算各个词之间的距离，来表示词与词之间的相似度。word2vec提取了更多的特征，它使得具有相同上下文语义的词尽可能离得近一些，而不太相关的词尽可能离得较远一些。例如，【腾讯】和【网易】两个词向量将会离得很近，同理【宝马】和【保时捷】两个词向量将会离得很近。而【腾讯】和">
+<meta name="keywords" content="wiki,gensim,word2vec">
 <meta property="og:type" content="article">
 <meta property="og:title" content="基于gensim的Wiki百科中文word2vec训练">
 <meta property="og:url" content="http://yoursite.com/2017/07/13/01-word2vec-based-on-gensim/index.html">
 <meta property="og:site_name" content="League of Data">
-<meta property="og:description" content="Word2Vec简介Word2Vec是词（Word）的一种表示方式。不同于one-hot vector，word2vec可以通过计算各个词之间的距离，来表示词与词之间的相似度。word2vec提取了更多的特征，它使得具有相同上下文语义的词尽可能离得近一些，而不太相关的词尽可能离得较远一些。例如，【腾讯】和【网易】两个词向量将会离得很近，同理【宝马】和【保时捷】两个词向量将会离得很近。而【腾讯】和【">
-<meta property="og:updated_time" content="2017-07-13T16:04:10.231Z">
+<meta property="og:description" content="Word2Vec简介Word2Vec是词（Word）的一种表示方式。不同于one-hot vector，word2vec可以通过计算各个词之间的距离，来表示词与词之间的相似度。word2vec提取了更多的特征，它使得具有相同上下文语义的词尽可能离得近一些，而不太相关的词尽可能离得较远一些。例如，【腾讯】和【网易】两个词向量将会离得很近，同理【宝马】和【保时捷】两个词向量将会离得很近。而【腾讯】和">
+<meta property="og:image" content="https://github.com/guuboi/markdown_photos/blob/master/images/pose04.jpg">
+<meta property="og:updated_time" content="2017-07-16T16:22:37.020Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于gensim的Wiki百科中文word2vec训练">
-<meta name="twitter:description" content="Word2Vec简介Word2Vec是词（Word）的一种表示方式。不同于one-hot vector，word2vec可以通过计算各个词之间的距离，来表示词与词之间的相似度。word2vec提取了更多的特征，它使得具有相同上下文语义的词尽可能离得近一些，而不太相关的词尽可能离得较远一些。例如，【腾讯】和【网易】两个词向量将会离得很近，同理【宝马】和【保时捷】两个词向量将会离得很近。而【腾讯】和【">
+<meta name="twitter:description" content="Word2Vec简介Word2Vec是词（Word）的一种表示方式。不同于one-hot vector，word2vec可以通过计算各个词之间的距离，来表示词与词之间的相似度。word2vec提取了更多的特征，它使得具有相同上下文语义的词尽可能离得近一些，而不太相关的词尽可能离得较远一些。例如，【腾讯】和【网易】两个词向量将会离得很近，同理【宝马】和【保时捷】两个词向量将会离得很近。而【腾讯】和">
+<meta name="twitter:image" content="https://github.com/guuboi/markdown_photos/blob/master/images/pose04.jpg">
   
     <link rel="alternate" href="/atom.xml" title="League of Data" type="application/atom+xml">
   
@@ -134,7 +136,8 @@
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Word2Vec简介"><a href="#Word2Vec简介" class="headerlink" title="Word2Vec简介"></a>Word2Vec简介</h1><p>Word2Vec是词（Word）的一种表示方式。不同于one-hot vector，word2vec可以通过计算各个词之间的距离，来表示词与词之间的相似度。word2vec提取了更多的特征，它使得具有相同上下文语义的词尽可能离得近一些，而不太相关的词尽可能离得较远一些。例如，【腾讯】和【网易】两个词向量将会离得很近，同理【宝马】和【保时捷】两个词向量将会离得很近。而【腾讯】和【宝马】/【保时捷】，【网易】和【宝马】/【保时捷】将会离得较远一些。因为【腾讯】和【网易】都同属于互联网类目，而【宝马】和【保时捷】都同属于汽车类目。人以类聚，物以群分嘛！互联网圈子中谈的毕竟都是互联网相关的话题，而汽车圈子中谈论的都是和汽车相关的话题。</p>
+        <p><img src="https://github.com/guuboi/markdown_photos/blob/master/images/pose04.jpg" alt="img caption"></p>
+<h1 id="Word2Vec简介"><a href="#Word2Vec简介" class="headerlink" title="Word2Vec简介"></a>Word2Vec简介</h1><p>Word2Vec是词（Word）的一种表示方式。不同于one-hot vector，word2vec可以通过计算各个词之间的距离，来表示词与词之间的相似度。word2vec提取了更多的特征，它使得具有相同上下文语义的词尽可能离得近一些，而不太相关的词尽可能离得较远一些。例如，【腾讯】和【网易】两个词向量将会离得很近，同理【宝马】和【保时捷】两个词向量将会离得很近。而【腾讯】和【宝马】/【保时捷】，【网易】和【宝马】/【保时捷】将会离得较远一些。因为【腾讯】和【网易】都同属于互联网类目，而【宝马】和【保时捷】都同属于汽车类目。人以类聚，物以群分嘛！互联网圈子中谈的毕竟都是互联网相关的话题，而汽车圈子中谈论的都是和汽车相关的话题。</p>
 <a id="more"></a>
 <p>我们怎么得到一个词的word2vec呢？下面我们将介绍如何使用python gensim得到我们想要的词向量。总的来说，包括以下几个步骤：</p>
 <ul>
