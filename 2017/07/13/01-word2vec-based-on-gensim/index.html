@@ -6,13 +6,13 @@
   <title>基于gensim的Wiki百科中文word2vec训练 | League of Data</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="gensimword2vecwiki" />
+  <meta name="keywords" content="wikigensimword2vec" />
   
   
   
   
   <meta name="description" content="Word2Vec简介Word2Vec是词（Word）的一种表示方式。不同于one-hot vector，word2vec可以通过计算各个词之间的距离，来表示词与词之间的相似度。word2vec提取了更多的特征，它使得具有相同上下文语义的词尽可能离得近一些，而不太相关的词尽可能离得较远一些。例如，【腾讯】和【网易】两个词向量将会离得很近，同理【宝马】和【保时捷】两个词向量将会离得很近。而【腾讯】和【">
-<meta name="keywords" content="gensim,word2vec,wiki">
+<meta name="keywords" content="wiki,gensim,word2vec">
 <meta property="og:type" content="article">
 <meta property="og:title" content="基于gensim的Wiki百科中文word2vec训练">
 <meta property="og:url" content="http://yoursite.com/2017/07/13/01-word2vec-based-on-gensim/index.html">
@@ -58,32 +58,10 @@
 
 
   
-  
-  <div class="site-header-image">
-    <img id="originBg" width="100%" alt="Hike News" src="">
-  </div>
-
-  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
-    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
-  </div>
-
-  <script>
-        var imgUrls = "css/images/pose01.jpg,css/images/pose02.jpg".split(",");
-        var random = Math.floor((Math.random() * imgUrls.length ));
-        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
-          document.getElementById("originBg").src=imgUrls[random];
-          document.getElementById("blurBg").src=imgUrls[random];
-        } else {
-          document.getElementById("originBg").src='/' + imgUrls[random];
-          document.getElementById("blurBg").src='/' + imgUrls[random];
-        }
-    </script>
-
-
 
 
 <header id="allheader" class="site-header" role="banner" 
-   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+   >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -287,9 +265,6 @@
 
 
     <!-- headerblur min height -->
-    
-      var headerblur = document.getElementById("header-blur");
-      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
     
     
 </script>
