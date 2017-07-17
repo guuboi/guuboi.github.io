@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>归档 | League of Data</title>
+  <title>第 2 页 | League of Data</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
   
@@ -12,7 +12,7 @@
   <meta name="description" content="HOW NOT TO BE WRONG ?">
 <meta property="og:type" content="website">
 <meta property="og:title" content="League of Data">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+<meta property="og:url" content="http://yoursite.com/page/2/index.html">
 <meta property="og:site_name" content="League of Data">
 <meta property="og:description" content="HOW NOT TO BE WRONG ?">
 <meta name="twitter:card" content="summary">
@@ -99,263 +99,136 @@
       <div id="content" class="outer">
         
           <section id="main">
-  <div class="archives-tags-wrap"><blockquote><span>嗯，目前共计12篇文章</span></blockquote>
-
-
-
-
-
-	<!-- 完全显示 -->
-	
-	
-		
-		
-		  
-		  
-		  <section class="archives-wrap">
-		    <div class="archive-year-wrap">
-		      <h1><a href="/archives/2017" class="archive-year">2017</a></h1>
-		    </div>
-		    <div class="archives">
-		
-		<article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-
-      <a href="/2017/07/17/01-advanced-r-data-structure/" class="archive-article-date">
-		  <time datetime="2017-07-17T14:16:47.494Z" itemprop="datePublished">7月 17, 2017</time>
-	  </a>
-      
-    </header>
-  </div>
-</article>
-	
-		
-		
-		<article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-
-      <a href="/2017/07/13/11-word2vec-based-on-gensim/" class="archive-article-date">
-		  <time datetime="2017-07-13T07:30:16.000Z" itemprop="datePublished">7月 13, 2017</time>
-	  </a>
-      
+  
+    <article id="post-03-Theano-02"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
   
     <h1 class="thumb" itemprop="name">
-      <a class="archive-article-title" href="/2017/07/13/11-word2vec-based-on-gensim/">基于gensim的Wiki百科中文word2vec训练</a>
+      <a class="article-title" href="/2017/05/02/03-Theano-02/">Theano - 代数</a>
     </h1>
   
 
-    </header>
-  </div>
-</article>
-	
-		
-		
-		<article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-
-      <a href="/2017/07/12/12-opencc-tools/" class="archive-article-date">
-		  <time datetime="2017-07-12T07:30:16.000Z" itemprop="datePublished">7月 12, 2017</time>
-	  </a>
+      </header>
+    
+    <div class="article-meta">
       
+	<a href="/2017/05/02/03-Theano-02/" class="article-date">
+	  <time datetime="2017-05-02T07:30:16.000Z" itemprop="datePublished">五月 2, 2017</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python/">Python</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+          <div class="entry-thumbnail">
+            <a href="/2017/05/02/03-Theano-02/"><img src="css/images/pose07.jpg" class="attachment-thumb-featured size-thumb-featured wp-post-image" alt=""></a>
+          </div>
+          <div class="entry-summary">
+          两个标量的加法为了让我们开始使用Theano，以及感受theano是如何工作的。接下来，我们构造一个简单的函数：加法。
+##　两个标量的加法1234567891011121314151617181920212223242526import numpyimport theano.tensor as Timport theanofrom theano import function# 定义两个符号（变量）x, y来表示你想实施加法的数。# 换句话说， x,y,z均为变量对象。# 在Theano中，所有的符号必须定义类型。# T.dscalar: 表示双精度（doubles)的0维数组（标量），他是Theano中的类型(Type)x = T.dscalar(&apos;x&apos;)y = T.dscalar(&apos;y&apos;)z = x + y# dscalar不是一个类(class)。因此，事实上x,y都不是dscalr的实例。# 它们是TensorVariable的实例。# 然而，x,y被赋值为theano的dscalar类型。type(x)  # theano.tensor.var.TensorVariablex.type  # TensorType(float64, scalar)T.dscalar   # TensorType(float64, scalar)x.type is T.dscalar # True# 在你运行f时，你会注意到有些延迟# 因为f正在被编译为C代码f = function([x, y], z)f(2, 3)numpy.allclose(f(16.3, 12.1), 28.4)numpy.allcolse(z.eval(&#123;x: 16.3, y: 12.1&#125;), 28.4)
+
+        
+          <p class="article-more-link">
+            <a href="/2017/05/02/03-Theano-02/#more">阅读全文</a>
+          </p>
+        </div>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python/">Python</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Theano/">Theano</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-02-Theano-01"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
   
     <h1 class="thumb" itemprop="name">
-      <a class="archive-article-title" href="/2017/07/12/12-opencc-tools/">OpenCC - 简体繁体转换</a>
+      <a class="article-title" href="/2017/05/01/02-Theano-01/">Theano - numpy新手</a>
     </h1>
   
 
-    </header>
-  </div>
-</article>
-	
-		
-		
-		<article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-
-      <a href="/2017/07/10/13-hitltp-tools/" class="archive-article-date">
-		  <time datetime="2017-07-10T07:30:16.000Z" itemprop="datePublished">7月 10, 2017</time>
-	  </a>
+      </header>
+    
+    <div class="article-meta">
       
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="archive-article-title" href="/2017/07/10/13-hitltp-tools/">pyltp - 哈工大语言云python接口使用说明</a>
-    </h1>
-  
+	<a href="/2017/05/01/02-Theano-01/" class="article-date">
+	  <time datetime="2017-05-01T07:30:16.000Z" itemprop="datePublished">五月 1, 2017</time>
+	</a>
 
-    </header>
-  </div>
-</article>
-	
-		
-		
-		<article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-
-      <a href="/2017/05/08/09-Theano-08/" class="archive-article-date">
-		  <time datetime="2017-05-08T07:30:16.000Z" itemprop="datePublished">5月 08, 2017</time>
-	  </a>
       
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="archive-article-title" href="/2017/05/08/09-Theano-08/">Theano - 广播</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-	
-		
-		
-		<article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-
-      <a href="/2017/05/07/08-Theano-07/" class="archive-article-date">
-		  <time datetime="2017-05-07T07:30:16.000Z" itemprop="datePublished">5月 07, 2017</time>
-	  </a>
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python/">Python</a>
+ 
       
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="archive-article-title" href="/2017/05/07/08-Theano-07/">Theano - 处理形状信息</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-	
-		
-		
-		<article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-
-      <a href="/2017/05/06/07-Theano-06/" class="archive-article-date">
-		  <time datetime="2017-05-06T07:30:16.000Z" itemprop="datePublished">5月 06, 2017</time>
-	  </a>
+    </div>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="archive-article-title" href="/2017/05/06/07-Theano-06/">Theano - 循环</a>
-    </h1>
-  
+        
+          <div class="entry-thumbnail">
+            <a href="/2017/05/01/02-Theano-01/"><img src="css/images/pose07.jpg" class="attachment-thumb-featured size-thumb-featured wp-post-image" alt=""></a>
+          </div>
+          <div class="entry-summary">
+          机器学习中的矩阵公约水平方向为矩阵的行，竖直方向为矩阵的列，每一行为一个样例（记录）。 因此输入[10, 5]表示：由10个样例（记录），每个样例具有5个维度（属性）组成的矩阵。如果[10,5]为一个神经网络的输入，那么权重矩阵的表示形式为[5, #hid]的矩阵。考虑一下数组：1234567import numpy as npnp.asarray([[1., 2], [3, 4], [5, 6]])np.asarray([[1., 2], [3, 4], [5, 6]]).shape# 这是一个3*2的矩阵，即有3行2列# 输出矩阵的第3行，第1列元素np.asarray([[1., 2], [3, 4], [5, 6]])[2, 0]
 
-    </header>
-  </div>
-</article>
-	
-		
-		
-		<article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-
-      <a href="/2017/05/05/06-Theano-05/" class="archive-article-date">
-		  <time datetime="2017-05-05T07:30:16.000Z" itemprop="datePublished">5月 05, 2017</time>
-	  </a>
+        
+          <p class="article-more-link">
+            <a href="/2017/05/01/02-Theano-01/#more">阅读全文</a>
+          </p>
+        </div>
       
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="archive-article-title" href="/2017/05/05/06-Theano-05/">Theano - 条件</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-	
-		
-		
-		<article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-
-      <a href="/2017/05/04/05-Theano-04/" class="archive-article-date">
-		  <time datetime="2017-05-04T07:30:16.000Z" itemprop="datePublished">5月 04, 2017</time>
-	  </a>
+    </div>
+    <footer class="entry-meta entry-footer">
       
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="archive-article-title" href="/2017/05/04/05-Theano-04/">Theano - 导数</a>
-    </h1>
-  
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python/">Python</a>
 
-    </header>
-  </div>
-</article>
-	
-		
-		
-		<article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-
-      <a href="/2017/05/03/04-Theano-03/" class="archive-article-date">
-		  <time datetime="2017-05-03T07:30:16.000Z" itemprop="datePublished">5月 03, 2017</time>
-	  </a>
       
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="archive-article-title" href="/2017/05/03/04-Theano-03/">Theano - 更多的例子</a>
-    </h1>
-  
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Theano/">Theano</a></li></ul>
 
-    </header>
-  </div>
-</article>
-	
-		
-		
-		<article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-
-      <a href="/2017/05/02/03-Theano-02/" class="archive-article-date">
-		  <time datetime="2017-05-02T07:30:16.000Z" itemprop="datePublished">5月 02, 2017</time>
-	  </a>
       
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="archive-article-title" href="/2017/05/02/03-Theano-02/">Theano - 代数</a>
-    </h1>
-  
-
-    </header>
+    </footer>
+    <hr class="entry-footer-hr">
   </div>
-</article>
-	
-		
-		
-		<article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-
-      <a href="/2017/05/01/02-Theano-01/" class="archive-article-date">
-		  <time datetime="2017-05-01T07:30:16.000Z" itemprop="datePublished">5月 01, 2017</time>
-	  </a>
-      
   
-    <h1 class="thumb" itemprop="name">
-      <a class="archive-article-title" href="/2017/05/01/02-Theano-01/">Theano - numpy新手</a>
-    </h1>
+</article>
+
+<!-- Table of Contents -->
+
   
 
-    </header>
-  </div>
-</article>
-	
 
-	
-		</div></section>
-	
-
-
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/">上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+  </nav>
 
 </section>
           <aside id="sidebar">

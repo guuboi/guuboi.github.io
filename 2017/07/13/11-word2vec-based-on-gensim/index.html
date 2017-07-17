@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>基于gensim的Wiki百科中文word2vec训练 | League of Data</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="gensimword2vecwiki" />
+  
+  
+  
+  
+  <meta name="description" content="Word2Vec简介Word2Vec是词（Word）的一种表示方式。不同于one-hot vector，word2vec可以通过计算各个词之间的距离，来表示词与词之间的相似度。word2vec提取了更多的特征，它使得具有相同上下文语义的词尽可能离得近一些，而不太相关的词尽可能离得较远一些。例如，【腾讯】和【网易】两个词向量将会离得很近，同理【宝马】和【保时捷】两个词向量将会离得很近。而【腾讯】和【">
+<meta name="keywords" content="gensim,word2vec,wiki">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于gensim的Wiki百科中文word2vec训练">
+<meta property="og:url" content="http://yoursite.com/2017/07/13/11-word2vec-based-on-gensim/index.html">
+<meta property="og:site_name" content="League of Data">
+<meta property="og:description" content="Word2Vec简介Word2Vec是词（Word）的一种表示方式。不同于one-hot vector，word2vec可以通过计算各个词之间的距离，来表示词与词之间的相似度。word2vec提取了更多的特征，它使得具有相同上下文语义的词尽可能离得近一些，而不太相关的词尽可能离得较远一些。例如，【腾讯】和【网易】两个词向量将会离得很近，同理【宝马】和【保时捷】两个词向量将会离得很近。而【腾讯】和【">
+<meta property="og:image" content="http://yoursite.com/2017/07/13/11-word2vec-based-on-gensim/css/images/pose06.jpg">
+<meta property="og:updated_time" content="2017-07-16T17:11:58.395Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于gensim的Wiki百科中文word2vec训练">
+<meta name="twitter:description" content="Word2Vec简介Word2Vec是词（Word）的一种表示方式。不同于one-hot vector，word2vec可以通过计算各个词之间的距离，来表示词与词之间的相似度。word2vec提取了更多的特征，它使得具有相同上下文语义的词尽可能离得近一些，而不太相关的词尽可能离得较远一些。例如，【腾讯】和【网易】两个词向量将会离得很近，同理【宝马】和【保时捷】两个词向量将会离得很近。而【腾讯】和【">
+<meta name="twitter:image" content="http://yoursite.com/2017/07/13/11-word2vec-based-on-gensim/css/images/pose06.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="League of Data" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+
+
+<header id="allheader" class="site-header" role="banner" 
+   >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" title="League of Data" rel="home"> League of Data </a>
+            
+          </h1>
+          
+          
+            <div class="site-description">HOW NOT TO BE WRONG ?</div>
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">首页</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">归档</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">关于</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-11-word2vec-based-on-gensim" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="/css/images/pose06.jpg" rel="gallery_cj58a6he3000tksw4dma12gfm">
+        <img src="/css/images/pose06.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      基于gensim的Wiki百科中文word2vec训练
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2017/07/13/11-word2vec-based-on-gensim/" class="article-date">
+	  <time datetime="2017-07-13T07:30:16.000Z" itemprop="datePublished">七月 13, 2017</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/自然语言处理/">自然语言处理</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Word2Vec简介"><a href="#Word2Vec简介" class="headerlink" title="Word2Vec简介"></a>Word2Vec简介</h1><p>Word2Vec是词（Word）的一种表示方式。不同于one-hot vector，word2vec可以通过计算各个词之间的距离，来表示词与词之间的相似度。word2vec提取了更多的特征，它使得具有相同上下文语义的词尽可能离得近一些，而不太相关的词尽可能离得较远一些。例如，【腾讯】和【网易】两个词向量将会离得很近，同理【宝马】和【保时捷】两个词向量将会离得很近。而【腾讯】和【宝马】/【保时捷】，【网易】和【宝马】/【保时捷】将会离得较远一些。因为【腾讯】和【网易】都同属于互联网类目，而【宝马】和【保时捷】都同属于汽车类目。人以类聚，物以群分嘛！互联网圈子中谈的毕竟都是互联网相关的话题，而汽车圈子中谈论的都是和汽车相关的话题。</p>
+<a id="more"></a>
+<p>我们怎么得到一个词的word2vec呢？下面我们将介绍如何使用python gensim得到我们想要的词向量。总的来说，包括以下几个步骤：</p>
+<ul>
+<li>wiki中文数据预处理</li>
+<li>文本数据分词</li>
+<li>gensim word2vec训练</li>
+</ul>
+<h1 id="wiki中文数据预处理"><a href="#wiki中文数据预处理" class="headerlink" title="wiki中文数据预处理"></a>wiki中文数据预处理</h1><p>首先，下载wiki中文数据：<a href="https://dumps.wikimedia.org/zhwiki/latest/zhwiki-latest-pages-articles.xml.bz2" target="_blank" rel="external">zhwiki-latest-pages-articles.xml.bz2</a>。因为zhwiki数据中包含很多繁体字，所以我们想获得简体语料库，接下来需要做以下两件事：</p>
+<ul>
+<li>使用gensim模块中的WikiCorpus从bz2中获取原始文本数据</li>
+<li>使用OpenCC将繁体字转换为简体字</li>
+</ul>
+<h2 id="WikiCorpus获取原始文本数据"><a href="#WikiCorpus获取原始文本数据" class="headerlink" title="WikiCorpus获取原始文本数据"></a>WikiCorpus获取原始文本数据</h2><p>数据处理的python代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">from __future__ import print_function</div><div class="line">from gensim.corpora import WikiCorpus</div><div class="line">import jieba</div><div class="line">import codecs</div><div class="line">import os</div><div class="line">import six</div><div class="line">from gensim.models import Word2Vec</div><div class="line">from gensim.models.word2vec import LineSentence</div><div class="line">import multiprocessing</div><div class="line"></div><div class="line"> </div><div class="line">class Config:</div><div class="line">    data_path = &apos;xxx/zhwiki&apos;</div><div class="line">    zhwiki_bz2 = &apos;zhwiki-latest-pages-articles.xml.bz2&apos;</div><div class="line">    zhwiki_raw = &apos;zhwiki_raw.txt&apos;</div><div class="line">    zhwiki_raw_t2s = &apos;zhwiki_raw_t2s.txt&apos;</div><div class="line">    zhwiki_seg_t2s = &apos;zhwiki_seg.txt&apos;</div><div class="line">    embedded_model_t2s = &apos;embedding_model_t2s/zhwiki_embedding_t2s.model&apos;</div><div class="line">    embedded_vector_t2s = &apos;embedding_model_t2s/vector_t2s&apos;</div><div class="line"> </div><div class="line"> </div><div class="line">def dataprocess(_config):</div><div class="line">    i = 0</div><div class="line">    if six.PY3:</div><div class="line">        output = open(os.path.join(_config.data_path, _config.zhwiki_raw), &apos;w&apos;)</div><div class="line">    output = codecs.open(os.path.join(_config.data_path, _config.zhwiki_raw), &apos;w&apos;)</div><div class="line">    wiki = WikiCorpus(os.path.join(_config.data_path, _config.zhwiki_bz2), lemmatize=False, dictionary=&#123;&#125;)</div><div class="line">    for text in wiki.get_texts():</div><div class="line">        if six.PY3:</div><div class="line">            output.write(b&apos; &apos;.join(text).decode(&apos;utf-8&apos;, &apos;ignore&apos;) + &apos;\n&apos;)</div><div class="line">        else:</div><div class="line">            output.write(&apos; &apos;.join(text) + &apos;\n&apos;)</div><div class="line">        i += 1</div><div class="line">        if i % 10000 == 0:</div><div class="line">            print(&apos;Saved &apos; + str(i) + &apos; articles&apos;)</div><div class="line">    output.close()</div><div class="line">    print(&apos;Finished Saved &apos; + str(i) + &apos; articles&apos;)</div><div class="line"></div><div class="line">config = Config()</div><div class="line">dataprocess(config)</div></pre></td></tr></table></figure>
+<h2 id="使用OpenCC将繁体字转换为简体字"><a href="#使用OpenCC将繁体字转换为简体字" class="headerlink" title="使用OpenCC将繁体字转换为简体字"></a>使用OpenCC将繁体字转换为简体字</h2><p>这里，需要预先安装OpenCC，关于OpenCC在linux环境中的安装方法，请参考<a href="http://www.jianshu.com/p/834a02d085b6" target="_blank" rel="external">这篇文章</a>。仅仅需要两行linux命令就可以完成繁体字转换为简体字的认为，而且速度很快。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ cd /xxx/zhwiki/</div><div class="line">$ opencc -i zhwiki_raw.txt -o zhwiki_t2s.txt -c t2s.json</div></pre></td></tr></table></figure></p>
+<h1 id="文本数据分词"><a href="#文本数据分词" class="headerlink" title="文本数据分词"></a>文本数据分词</h1><p>对于分词这个任务，我们直接使用了python的jieba分词模块。你也可以使用哈工大的ltp或者斯坦福的nltk python接口进行分词，准确率及权威度挺高的。不过这两个安装的时候会花费很长时间，尤其是斯坦福的。关于jieba的分词处理代码，参考如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">def is_alpha(tok):</div><div class="line">    try:</div><div class="line">        return tok.encode(&apos;ascii&apos;).isalpha()</div><div class="line">    except UnicodeEncodeError:</div><div class="line">        return False</div><div class="line"></div><div class="line"></div><div class="line">def zhwiki_segment(_config, remove_alpha=True):</div><div class="line">    i = 0</div><div class="line">    if six.PY3:</div><div class="line">        output = open(os.path.join(_config.data_path, _config.zhwiki_seg_t2s), &apos;w&apos;, encoding=&apos;utf-8&apos;)</div><div class="line">    output = codecs.open(os.path.join(_config.data_path, _config.zhwiki_seg_t2s), &apos;w&apos;, encoding=&apos;utf-8&apos;)</div><div class="line">    print(&apos;Start...&apos;)</div><div class="line">    with codecs.open(os.path.join(_config.data_path, _config.zhwiki_raw_t2s), &apos;r&apos;, encoding=&apos;utf-8&apos;) as raw_input:</div><div class="line">        for line in raw_input.readlines():</div><div class="line">            line = line.strip()</div><div class="line">            i += 1</div><div class="line">            print(&apos;line &apos; + str(i))</div><div class="line">            text = line.split()</div><div class="line">            if True:</div><div class="line">                text = [w for w in text if not is_alpha(w)]</div><div class="line">            word_cut_seed = [jieba.cut(t) for t in text]</div><div class="line">            tmp = &apos;&apos;</div><div class="line">            for sent in word_cut_seed:</div><div class="line">                for tok in sent:</div><div class="line">                    tmp += tok + &apos; &apos;</div><div class="line">            tmp = tmp.strip()</div><div class="line">            if tmp:</div><div class="line">                output.write(tmp + &apos;\n&apos;)</div><div class="line">        output.close()</div><div class="line"></div><div class="line">zhwiki_segment(config)</div></pre></td></tr></table></figure></p>
+<h1 id="gensim-word2vec训练"><a href="#gensim-word2vec训练" class="headerlink" title="gensim word2vec训练"></a>gensim word2vec训练</h1><p>python的gensim模块提供了word2vec训练，为我们模型的训练提供了很大的方便。关于gensim的使用方法，可以参考<a href="https://segmentfault.com/a/1190000008173404?from=timeline" target="_blank" rel="external">基于Gensim的Word2Vec实践</a>。<br>本次训练的词向量大小size为50，训练窗口为5，最小词频为5，并使用了多线程，具体代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">def word2vec(_config, saved=False):</div><div class="line">    print(&apos;Start...&apos;)</div><div class="line">    model = Word2Vec(LineSentence(os.path.join(_config.data_path, _config.zhwiki_seg_t2s)),</div><div class="line">                     size=50, window=5, min_count=5, workers=multiprocessing.cpu_count())</div><div class="line">    if saved:</div><div class="line">        model.save(os.path.join(_config.data_path, _config.embedded_model_t2s))</div><div class="line">        model.save_word2vec_format(os.path.join(_config.data_path, _config.embedded_vector_t2s), binary=False)</div><div class="line">    print(&quot;Finished!&quot;)</div><div class="line">    return model</div><div class="line"> </div><div class="line"> </div><div class="line">def wordsimilarity(word, model):</div><div class="line">    semi = &apos;&apos;</div><div class="line">    try:</div><div class="line">        semi = model.most_similar(word, topn=10)</div><div class="line">    except KeyError:</div><div class="line">        print(&apos;The word not in vocabulary!&apos;)</div><div class="line">    for term in semi:</div><div class="line">        print(&apos;%s,%s&apos; % (term[0],term[1]))</div><div class="line"></div><div class="line">model = word2vec(config, saved=True)</div></pre></td></tr></table></figure></p>
+<p>word2vec训练已经完成，我们得到了想要的模型以及词向量，并保存到本地。下面我们分别查看同【宝马】和【腾讯】最相近的前10个词语。可以发现：和【宝马】相近的词大都属于汽车行业，而且是汽车品牌；和【腾讯】相近的词大都属于互联网行业。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; wordsimilarity(word=u&apos;宝马&apos;, model=model)</div><div class="line">保时捷,0.92567974329</div><div class="line">固特异,0.888278841972</div><div class="line">劳斯莱斯,0.884045600891</div><div class="line">奥迪,0.881808757782</div><div class="line">马自达,0.881799697876</div><div class="line">亚菲特,0.880708634853</div><div class="line">欧宝,0.877104878426</div><div class="line">雪铁龙,0.876984715462</div><div class="line">玛莎拉蒂,0.868475496769</div><div class="line">桑塔纳,0.865387916565</div><div class="line"></div><div class="line">&gt;&gt;&gt; wordsimilarity(word=u&apos;腾讯&apos;, model=model)</div><div class="line">网易,0.880213916302</div><div class="line">优酷,0.873666107655</div><div class="line">腾讯网,0.87026232481</div><div class="line">广州日报,0.859486758709</div><div class="line">微信,0.835543811321</div><div class="line">天涯社区,0.834927380085</div><div class="line">李彦宏,0.832848489285</div><div class="line">土豆网,0.831390202045</div><div class="line">团购,0.829696238041</div><div class="line">搜狐网,0.825544642448</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>附<a href="http://pan.baidu.com/s/1eRLUR9g" target="_blank" rel="external">相关数据及代码</a>，包含：简体字转换后文本，分词后文本，以及50维word2vec词向量。</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/自然语言处理/">自然语言处理</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gensim/">gensim</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/wiki/">wiki</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/word2vec/">word2vec</a></li></ul>
+
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/07/17/01-advanced-r-data-structure/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/07/12/12-opencc-tools/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">OpenCC - 简体繁体转换</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Word2Vec简介"><span class="nav-number">1.</span> <span class="nav-text">Word2Vec简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#wiki中文数据预处理"><span class="nav-number">2.</span> <span class="nav-text">wiki中文数据预处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#WikiCorpus获取原始文本数据"><span class="nav-number">2.1.</span> <span class="nav-text">WikiCorpus获取原始文本数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用OpenCC将繁体字转换为简体字"><span class="nav-number">2.2.</span> <span class="nav-text">使用OpenCC将繁体字转换为简体字</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文本数据分词"><span class="nav-number">3.</span> <span class="nav-text">文本数据分词</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#gensim-word2vec训练"><span class="nav-number">4.</span> <span class="nav-text">gensim word2vec训练</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2017 League of Data All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Theano - 代数 | League of Data</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="PythonTheano" />
+  
+  
+  
+  
+  <meta name="description" content="两个标量的加法为了让我们开始使用Theano，以及感受theano是如何工作的。接下来，我们构造一个简单的函数：加法。 ##　两个标量的加法1234567891011121314151617181920212223242526import numpyimport theano.tensor as Timport theanofrom theano import function# 定义两个符号（变">
+<meta name="keywords" content="Python,Theano">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Theano - 代数">
+<meta property="og:url" content="http://yoursite.com/2017/05/02/03-Theano-02/index.html">
+<meta property="og:site_name" content="League of Data">
+<meta property="og:description" content="两个标量的加法为了让我们开始使用Theano，以及感受theano是如何工作的。接下来，我们构造一个简单的函数：加法。 ##　两个标量的加法1234567891011121314151617181920212223242526import numpyimport theano.tensor as Timport theanofrom theano import function# 定义两个符号（变">
+<meta property="og:image" content="http://yoursite.com/2017/05/02/03-Theano-02/css/images/pose07.jpg">
+<meta property="og:updated_time" content="2017-07-17T14:47:30.690Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Theano - 代数">
+<meta name="twitter:description" content="两个标量的加法为了让我们开始使用Theano，以及感受theano是如何工作的。接下来，我们构造一个简单的函数：加法。 ##　两个标量的加法1234567891011121314151617181920212223242526import numpyimport theano.tensor as Timport theanofrom theano import function# 定义两个符号（变">
+<meta name="twitter:image" content="http://yoursite.com/2017/05/02/03-Theano-02/css/images/pose07.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="League of Data" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+
+
+<header id="allheader" class="site-header" role="banner" 
+   >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" title="League of Data" rel="home"> League of Data </a>
+            
+          </h1>
+          
+          
+            <div class="site-description">HOW NOT TO BE WRONG ?</div>
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">首页</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">归档</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">关于</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-03-Theano-02" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="/css/images/pose07.jpg" rel="gallery_cj58a6hes0017ksw416ig8vdv">
+        <img src="/css/images/pose07.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Theano - 代数
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2017/05/02/03-Theano-02/" class="article-date">
+	  <time datetime="2017-05-02T07:30:16.000Z" itemprop="datePublished">五月 2, 2017</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python/">Python</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="两个标量的加法"><a href="#两个标量的加法" class="headerlink" title="两个标量的加法"></a>两个标量的加法</h1><p>为了让我们开始使用Theano，以及感受theano是如何工作的。接下来，我们构造一个简单的函数：加法。</p>
+<p>##　两个标量的加法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">import numpy</div><div class="line">import theano.tensor as T</div><div class="line">import theano</div><div class="line">from theano import function</div><div class="line"></div><div class="line"># 定义两个符号（变量）x, y来表示你想实施加法的数。</div><div class="line"># 换句话说， x,y,z均为变量对象。</div><div class="line"># 在Theano中，所有的符号必须定义类型。</div><div class="line"># T.dscalar: 表示双精度（doubles)的0维数组（标量），他是Theano中的类型(Type)</div><div class="line">x = T.dscalar(&apos;x&apos;)</div><div class="line">y = T.dscalar(&apos;y&apos;)</div><div class="line">z = x + y</div><div class="line"># dscalar不是一个类(class)。因此，事实上x,y都不是dscalr的实例。</div><div class="line"># 它们是TensorVariable的实例。</div><div class="line"># 然而，x,y被赋值为theano的dscalar类型。</div><div class="line">type(x)  # theano.tensor.var.TensorVariable</div><div class="line">x.type  # TensorType(float64, scalar)</div><div class="line">T.dscalar   # TensorType(float64, scalar)</div><div class="line">x.type is T.dscalar # True</div><div class="line"></div><div class="line"># 在你运行f时，你会注意到有些延迟</div><div class="line"># 因为f正在被编译为C代码</div><div class="line">f = function([x, y], z)</div><div class="line">f(2, 3)</div><div class="line">numpy.allclose(f(16.3, 12.1), 28.4)</div><div class="line">numpy.allcolse(z.eval(&#123;x: 16.3, y: 12.1&#125;), 28.4)</div></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<h2 id="两个矩阵的加法"><a href="#两个矩阵的加法" class="headerlink" title="两个矩阵的加法"></a>两个矩阵的加法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">x = T.dmatrix(&apos;x&apos;)</div><div class="line">y = T.dmatrix(&apos;y&apos;)</div><div class="line">z = x + y</div><div class="line">f = function([x, y], z)</div><div class="line">f([[1, 2], [3, 4]], [[10, 20], [30, 40]])</div></pre></td></tr></table></figure>
+<h2 id="可以用到的类型-type-："><a href="#可以用到的类型-type-：" class="headerlink" title="可以用到的类型(type)："></a>可以用到的类型(type)：</h2><ul>
+<li>byte: bscalar, bvector, bmatrix, brow, bcol, btensor3, btensor4, btensro5</li>
+<li>16-bit intergers: wscalar, wvector, wmatrix, wrow, wcol, wtensor3, wtensor4, wtensor5</li>
+<li>32-bit intergers: iscalar, ivector, imatrix, irow, icol, itensor3, itensor4, itensor5</li>
+<li>64-bit intergers: lscalar, lvector, lmatrix, lrow, lcol, ltensor3, ltensor4, ltensor5</li>
+<li>float: fscalar, fvector, fmatrix, frow, fcol, ftensor3, ftensor4, ftensor5</li>
+<li>double: dscalar, dvector, dmatrix, drow, dcol, dtensor3, dtensor4, dtensor5</li>
+<li>complex: cscalar, cvector, cmatrix, crow, ccol, ctensor3, ctensor4, ctensor5</li>
+</ul>
+<h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">a = theano.tensor.vector()  # 声明一个变量</div><div class="line">out = a + a ** 10   # 构造一个符号表达式</div><div class="line">f = theano.function([a], out)   # 编译一个函数</div><div class="line">print(f([0, 1, 2]))</div></pre></td></tr></table></figure>
+<p>修正并执行上面的代码，使得其能够计算：a ^ 2 + b ^ 2 + 2ab</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">a = theano.tensor.vector()</div><div class="line">b = theano.tensor.vector()</div><div class="line">out1 = a ** 2 + b ** 2 + 2 * a * b</div><div class="line">out2 = (a + b) ** 2</div><div class="line">f1 = theano.function([a, b], out1)</div><div class="line">f2 = theano.function([a, b], out2)</div><div class="line">print(f1([0, 1], [1, 2]))</div><div class="line">print(f2([0, 1], [1, 2]))</div></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python/">Python</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Theano/">Theano</a></li></ul>
+
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/05/03/04-Theano-03/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          Theano - 更多的例子
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/05/01/02-Theano-01/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">Theano - numpy新手</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#两个标量的加法"><span class="nav-number">1.</span> <span class="nav-text">两个标量的加法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#两个矩阵的加法"><span class="nav-number">1.1.</span> <span class="nav-text">两个矩阵的加法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可以用到的类型-type-："><span class="nav-number">1.2.</span> <span class="nav-text">可以用到的类型(type)：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#练习"><span class="nav-number">2.</span> <span class="nav-text">练习</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2017 League of Data All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>

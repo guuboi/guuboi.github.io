@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Theano - 广播 | League of Data</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="PythonTheano" />
+  
+  
+  
+  
+  <meta name="description" content="广播（Broadcasting)广播是这样的一个机制：它允许不同维度的张量进行加法或者乘法运算。在运算时，他将会沿着维度缺失的方向复制较小的那个张量。 通过广播机制，一个标量可以被加到矩阵上，一个向量可以被加到矩阵上，或者一个标量可以被加到向量上。">
+<meta name="keywords" content="Python,Theano">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Theano - 广播">
+<meta property="og:url" content="http://yoursite.com/2017/05/08/09-Theano-08/index.html">
+<meta property="og:site_name" content="League of Data">
+<meta property="og:description" content="广播（Broadcasting)广播是这样的一个机制：它允许不同维度的张量进行加法或者乘法运算。在运算时，他将会沿着维度缺失的方向复制较小的那个张量。 通过广播机制，一个标量可以被加到矩阵上，一个向量可以被加到矩阵上，或者一个标量可以被加到向量上。">
+<meta property="og:image" content="http://yoursite.com/2017/05/08/09-Theano-08/css/images/pose07.jpg">
+<meta property="og:updated_time" content="2017-07-17T15:03:16.462Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Theano - 广播">
+<meta name="twitter:description" content="广播（Broadcasting)广播是这样的一个机制：它允许不同维度的张量进行加法或者乘法运算。在运算时，他将会沿着维度缺失的方向复制较小的那个张量。 通过广播机制，一个标量可以被加到矩阵上，一个向量可以被加到矩阵上，或者一个标量可以被加到向量上。">
+<meta name="twitter:image" content="http://yoursite.com/2017/05/08/09-Theano-08/css/images/pose07.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="League of Data" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+
+
+<header id="allheader" class="site-header" role="banner" 
+   >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" title="League of Data" rel="home"> League of Data </a>
+            
+          </h1>
+          
+          
+            <div class="site-description">HOW NOT TO BE WRONG ?</div>
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">首页</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">归档</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">关于</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-09-Theano-08" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="/css/images/pose07.jpg" rel="gallery_cj58a6hcd0006ksw4od9o6nnh">
+        <img src="/css/images/pose07.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Theano - 广播
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2017/05/08/09-Theano-08/" class="article-date">
+	  <time datetime="2017-05-08T07:30:16.000Z" itemprop="datePublished">五月 8, 2017</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python/">Python</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="广播（Broadcasting"><a href="#广播（Broadcasting" class="headerlink" title="广播（Broadcasting)"></a>广播（Broadcasting)</h1><p>广播是这样的一个机制：它允许不同维度的张量进行加法或者乘法运算。在运算时，他将会沿着维度缺失的方向复制较小的那个张量。</p>
+<p>通过广播机制，一个标量可以被加到矩阵上，一个向量可以被加到矩阵上，或者一个标量可以被加到向量上。<br><a id="more"></a><br><img src="css/images/pose08.jpg" alt="图片描述"></p>
+<p>如上图，广播一个行矩阵。T和F分别表示True和False,指明沿着哪个维度可以进行广播。如果第二个参数是向量，它的形状为（2，）以及它的广播模式为（False,）。它将会自动向左展开，匹配矩阵的维度，最终得到（1,2）和（True,Fale）。</p>
+<p>不像numpy那样动态地进行广播，Theano需要知道哪些维度需要进行广播。当可用的时候，广播信息将会以变量的类型给出。</p>
+<p>下面的代码说明为了和矩阵执行加法运算，行和列怎么进行广播的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">import theano</div><div class="line">import numpy</div><div class="line">import theano.tensor as T</div><div class="line">r = T.row()</div><div class="line">r.broadcastable</div><div class="line"># (True, False)</div><div class="line">mtr = T.matrix()</div><div class="line">mtr.broadcastable</div><div class="line"># (False, False)</div><div class="line">f_row = theano.function([r, mtr], [r + mtr])</div><div class="line">R = numpy.arange(3).reshape(1,3)</div><div class="line">R</div><div class="line"># array([[0, 1, 2]])</div><div class="line">M = numpy.arange(9).reshape(3, 3)</div><div class="line">M</div><div class="line"># array([[0, 1, 2],</div><div class="line">#        [3, 4, 5],</div><div class="line">#        [6, 7, 8]])</div><div class="line">f_row(R, M)</div><div class="line"># [array([[  0.,   2.,   4.],</div><div class="line">#        [  3.,   5.,   7.],</div><div class="line">#        [  6.,   8.,  10.]])]</div><div class="line">c = T.col()</div><div class="line">c.broadcastable</div><div class="line"># (False, True)</div><div class="line">f_col = theano.function([c, mtr], [c + mtr])</div><div class="line">C = numpy.arange(3).reshape(3, 1)</div><div class="line">C</div><div class="line"># array([[0],</div><div class="line">#        [1],</div><div class="line">#        [2]])</div><div class="line">M = numpy.arange(9).reshape(3, 3)</div><div class="line">f_col(C, M)</div><div class="line"># [array([[  0.,   1.,   2.],</div><div class="line">#        [  4.,   5.,   6.],</div><div class="line">#        [  8.,   9.,  10.]])]</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python/">Python</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Theano/">Theano</a></li></ul>
+
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/07/10/13-hitltp-tools/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          pyltp - 哈工大语言云python接口使用说明
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/05/07/08-Theano-07/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">Theano - 处理形状信息</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#广播（Broadcasting"><span class="nav-number">1.</span> <span class="nav-text">广播（Broadcasting)</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2017 League of Data All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>
