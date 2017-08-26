@@ -3,27 +3,27 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Theano - 条件 | League of Data</title>
+  <title>Pearson相关系数Vs.Spearman相关系数 | League of Data</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="PythonTheano" />
+  <meta name="keywords" content="PearsonSpearman相关系数" />
   
   
   
   
-  <meta name="description" content="IfElse vs Switch IfElse接收布尔型条件和两个变量作为输入。 Switch接收一个张量（Tensor）以及两个变量作为输入。 Switch进行元素级运算，因此比IfElse更常用。 IfElse比较懒惰，只计算满足条件的相应输出变量， 而Switch计算所有的输出变量。  即：  ifelse(condition, output1, output2): 如果condition:">
-<meta name="keywords" content="Python,Theano">
+  <meta name="description" content="统计术语中，相关系数一词经常被滥用，同时也困扰着我。相关系数描述一个变量随着另一个变量的增加而增加，也可以理解为单调递增。变量之间的这个单调趋势很值得去探索，但是大多数人习惯使用标准相关系数导致无法发现这一趋势。在我的印象中，老师在课堂上经常强调：我们现在所说的、以及以后所说的相关都指线性相关。所以，每当我们一提到相关性或者探寻变量间的相关性时，脑海里便跳出了线性相关。把变量间的相关性限制成了线性">
+<meta name="keywords" content="Pearson,Spearman,相关系数">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Theano - 条件">
-<meta property="og:url" content="http://yoursite.com/2017/05/05/06-Theano-05/index.html">
+<meta property="og:title" content="Pearson相关系数Vs.Spearman相关系数">
+<meta property="og:url" content="http://yoursite.com/2017/08/24/14-pearson_vs_spearman/index.html">
 <meta property="og:site_name" content="League of Data">
-<meta property="og:description" content="IfElse vs Switch IfElse接收布尔型条件和两个变量作为输入。 Switch接收一个张量（Tensor）以及两个变量作为输入。 Switch进行元素级运算，因此比IfElse更常用。 IfElse比较懒惰，只计算满足条件的相应输出变量， 而Switch计算所有的输出变量。  即：  ifelse(condition, output1, output2): 如果condition:">
-<meta property="og:image" content="http://yoursite.com/image/pose07.jpg">
-<meta property="og:updated_time" content="2017-07-17T15:29:49.068Z">
+<meta property="og:description" content="统计术语中，相关系数一词经常被滥用，同时也困扰着我。相关系数描述一个变量随着另一个变量的增加而增加，也可以理解为单调递增。变量之间的这个单调趋势很值得去探索，但是大多数人习惯使用标准相关系数导致无法发现这一趋势。在我的印象中，老师在课堂上经常强调：我们现在所说的、以及以后所说的相关都指线性相关。所以，每当我们一提到相关性或者探寻变量间的相关性时，脑海里便跳出了线性相关。把变量间的相关性限制成了线性">
+<meta property="og:image" content="http://yoursite.com/image/pose09.jpg">
+<meta property="og:updated_time" content="2017-08-26T12:19:19.311Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Theano - 条件">
-<meta name="twitter:description" content="IfElse vs Switch IfElse接收布尔型条件和两个变量作为输入。 Switch接收一个张量（Tensor）以及两个变量作为输入。 Switch进行元素级运算，因此比IfElse更常用。 IfElse比较懒惰，只计算满足条件的相应输出变量， 而Switch计算所有的输出变量。  即：  ifelse(condition, output1, output2): 如果condition:">
-<meta name="twitter:image" content="http://yoursite.com/image/pose07.jpg">
+<meta name="twitter:title" content="Pearson相关系数Vs.Spearman相关系数">
+<meta name="twitter:description" content="统计术语中，相关系数一词经常被滥用，同时也困扰着我。相关系数描述一个变量随着另一个变量的增加而增加，也可以理解为单调递增。变量之间的这个单调趋势很值得去探索，但是大多数人习惯使用标准相关系数导致无法发现这一趋势。在我的印象中，老师在课堂上经常强调：我们现在所说的、以及以后所说的相关都指线性相关。所以，每当我们一提到相关性或者探寻变量间的相关性时，脑海里便跳出了线性相关。把变量间的相关性限制成了线性">
+<meta name="twitter:image" content="http://yoursite.com/image/pose09.jpg">
   
     <link rel="alternate" href="/atom.xml" title="League of Data" type="application/atom+xml">
   
@@ -104,14 +104,14 @@
             
       <div id="content" class="outer">
         
-          <section id="main" style="float:none;"><article id="post-06-Theano-05" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+          <section id="main" style="float:none;"><article id="post-14-pearson_vs_spearman" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="/image/pose07.jpg" rel="gallery_cj6ta09oy000ezgw47sk2trr0">
-        <img src="/image/pose07.jpg" itemprop="image">
+      <a class="article-gallery-img fancybox" href="/image/pose09.jpg" rel="gallery_cj6ta09pl000zzgw477n7i035">
+        <img src="/image/pose09.jpg" itemprop="image">
       </a>
     
   </div>
@@ -122,7 +122,7 @@
         
   
     <h1 class="thumb" class="article-title" itemprop="name">
-      Theano - 条件
+      Pearson相关系数Vs.Spearman相关系数
     </h1>
   
 
@@ -130,13 +130,13 @@
     
     <div class="article-meta">
       
-	<a href="/2017/05/05/06-Theano-05/" class="article-date">
-	  <time datetime="2017-05-05T07:30:16.000Z" itemprop="datePublished">五月 5, 2017</time>
+	<a href="/2017/08/24/14-pearson_vs_spearman/" class="article-date">
+	  <time datetime="2017-08-24T07:30:16.000Z" itemprop="datePublished">八月 24, 2017</time>
 	</a>
 
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python/">Python</a>
+    <a class="article-category-link" href="/categories/数据分析/">数据分析</a>
  
       
 	<span id="busuanzi_container_page_pv">
@@ -146,31 +146,22 @@
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="IfElse-vs-Switch"><a href="#IfElse-vs-Switch" class="headerlink" title="IfElse vs Switch"></a>IfElse vs Switch</h1><ul>
-<li>IfElse接收布尔型条件和两个变量作为输入。</li>
-<li>Switch接收一个张量（Tensor）以及两个变量作为输入。</li>
-<li>Switch进行元素级运算，因此比IfElse更常用。</li>
-<li>IfElse比较懒惰，只计算满足条件的相应输出变量， 而Switch计算所有的输出变量。</li>
-</ul>
-<p>即：</p>
-<ul>
-<li>ifelse(condition, output1, output2): 如果condition:1(0),那么ifelse只计算output1(output2)并输出。</li>
-<li>switch(condition, output1, output2): 如果condition:1(0),那么switch计算output1和output2，并输出output1(output2)</li>
-</ul>
+        <p>统计术语中，<strong>相关系数</strong>一词经常被滥用，同时也困扰着我。<strong>相关系数</strong>描述一个变量随着另一个变量的增加而增加，也可以理解为单调递增。变量之间的这个单调趋势很值得去探索，但是大多数人习惯使用标准相关系数导致无法发现这一趋势。在我的印象中，老师在课堂上经常强调：我们现在所说的、以及以后所说的相关都指线性相关。所以，每当我们一提到相关性或者探寻变量间的相关性时，脑海里便跳出了线性相关。把变量间的相关性限制成了<strong>线性相关</strong>。</p>
 <a id="more"></a>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">from theano import tensor as T</div><div class="line">from theano.ifelse import ifelse</div><div class="line">import theano, time, numpy</div><div class="line"></div><div class="line">a, b = T.scalars(&apos;a&apos;, &apos;b&apos;)</div><div class="line">x, y = T.matrices(&apos;x&apos;, &apos;y&apos;)</div><div class="line"></div><div class="line">z_switch = T.switch(T.lt(a, b), T.mean(x), T.mean(y))</div><div class="line">z_ifelse = ifelse(T.lt(a, b), T.mean(x), T.mean(y))</div><div class="line"></div><div class="line">f_switch = theano.function([a, b, x, y], z_switch, mode=theano.Mode(linker=&apos;vm&apos;))</div><div class="line">f_ifelse = theano.function([a, b, x, y], z_ifelse, mode=theano.Mode(linker=&apos;vm&apos;))</div><div class="line"></div><div class="line">val1 = 0.</div><div class="line">val2 = 1.</div><div class="line">big_mat1 = numpy.ones((10000, 1000))</div><div class="line">big_mat2 = numpy.ones((10000, 1000))</div><div class="line">n_times = 10</div><div class="line"></div><div class="line">tic = time.clock()</div><div class="line">for i in range(n_times):</div><div class="line">    f_switch(val1, val2, big_mat1, big_mat2)</div><div class="line">print(&apos;time spent evaluating both values %f sec&apos; % (time.clock() - tic))</div><div class="line"></div><div class="line">tic = time.clock()</div><div class="line">for j in range(n_times):</div><div class="line">    f_ifelse(val1, val2, big_mat1, big_mat2)</div><div class="line">print(&apos;time spent evaluating one value %f sec&apos; % (time.clock() - tic))</div></pre></td></tr></table></figure>
-<p>在这个例子中，IfElse比Switch花费更少的时间，因为他只计算输出变量中的一个。<br>如果不使用linker=’vm’或linker=’cvm’，那么ifelse将会和switch一样计算两个输出变量，而且花费的时间和switch一样多。</p>
+<p><strong>Pearson相关系数</strong>，通常是学生们学到的计算相关系数的唯一方法，此方法倾向于研究<strong>线性趋势</strong>。只有<strong>Spearman相关系数</strong>，实际上用于检测一般单调趋势，而这种方法通常在课堂上老师没有讲解。通过下面这幅图，你可以清晰地看到随着x的多项式次数的增加，<strong>Pearson</strong>和<strong>Spearman相关系数</strong>是如何变化的。</p>
+<p>![PearsonVsSpearman][/image/pose09.jpg]</p>
+<p>如果<strong>Pearson相关系数</strong>确实检测到了单调趋势，那么随着x多项式次数的增加，<strong>Pearson相关系数</strong>会向0靠拢，但不会为0。此时，在非线性相关的时候使用<strong>Spearman相关系数</strong>会更加精确。</p>
 
       
     </div>
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python/">Python</a>
+    <a class="article-category-link" href="/categories/数据分析/">数据分析</a>
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Theano/">Theano</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pearson/">Pearson</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spearman/">Spearman</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/相关系数/">相关系数</a></li></ul>
 
       
         
@@ -205,19 +196,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2017/05/06/07-Theano-06/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">上一篇</strong>
-      <div class="article-nav-title">
-        
-          Theano - 循环
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/05/04/05-Theano-04/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2017/07/13/11-word2vec-based-on-gensim/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title">Theano - 导数</div>
+      <div class="article-nav-title">基于gensim的Wiki百科中文word2vec训练</div>
     </a>
   
 </nav>
@@ -231,7 +213,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#IfElse-vs-Switch"><span class="nav-number">1.</span> <span class="nav-text">IfElse vs Switch</span></a></li></ol>
+      <ol class="nav">无</ol>
     
     </div>
   </aside>
