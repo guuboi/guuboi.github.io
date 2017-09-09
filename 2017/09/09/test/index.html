@@ -3,27 +3,22 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
-  <title>Theano - 代数 | League of Data</title>
+  <title>test | League of Data</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="PythonTheano" />
   
   
   
-  
-  <meta name="description" content="两个标量的加法为了让我们开始使用Theano，以及感受theano是如何工作的。接下来，我们构造一个简单的函数：加法。 ##　两个标量的加法1234567891011121314151617181920212223242526import numpyimport theano.tensor as Timport theanofrom theano import function# 定义两个符号（变">
-<meta name="keywords" content="Python,Theano">
+  <meta name="description" content="Simple inline $a = b + c$. $$\frac{\partial u}{\partial t}$$">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Theano - 代数">
-<meta property="og:url" content="http://yoursite.com/2017/05/02/03-Theano-02/index.html">
+<meta property="og:title" content="test">
+<meta property="og:url" content="http://yoursite.com/2017/09/09/test/index.html">
 <meta property="og:site_name" content="League of Data">
-<meta property="og:description" content="两个标量的加法为了让我们开始使用Theano，以及感受theano是如何工作的。接下来，我们构造一个简单的函数：加法。 ##　两个标量的加法1234567891011121314151617181920212223242526import numpyimport theano.tensor as Timport theanofrom theano import function# 定义两个符号（变">
-<meta property="og:image" content="http://yoursite.com/image/pose07.jpg">
-<meta property="og:updated_time" content="2017-07-17T15:29:21.661Z">
+<meta property="og:description" content="Simple inline $a = b + c$. $$\frac{\partial u}{\partial t}$$">
+<meta property="og:updated_time" content="2017-09-09T15:05:04.846Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Theano - 代数">
-<meta name="twitter:description" content="两个标量的加法为了让我们开始使用Theano，以及感受theano是如何工作的。接下来，我们构造一个简单的函数：加法。 ##　两个标量的加法1234567891011121314151617181920212223242526import numpyimport theano.tensor as Timport theanofrom theano import function# 定义两个符号（变">
-<meta name="twitter:image" content="http://yoursite.com/image/pose07.jpg">
+<meta name="twitter:title" content="test">
+<meta name="twitter:description" content="Simple inline $a = b + c$. $$\frac{\partial u}{\partial t}$$">
   
     <link rel="alternate" href="/atom.xml" title="League of Data" type="application/atom+xml">
   
@@ -104,25 +99,15 @@
             
       <div id="content" class="outer">
         
-          <section id="main" style="float:none;"><article id="post-03-Theano-02" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+          <section id="main" style="float:none;"><article id="post-test" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
-<div class="article-gallery">
-  <div class="article-gallery-photos">
-    
-      <a class="article-gallery-img fancybox" href="/image/pose07.jpg" rel="gallery_cj7dfzwnb0007fgw40o3we0r9">
-        <img src="/image/pose07.jpg" itemprop="image">
-      </a>
-    
-  </div>
-</div>
-
     
       <header class="article-header">
         
   
     <h1 class="thumb" class="article-title" itemprop="name">
-      Theano - 代数
+      test
     </h1>
   
 
@@ -130,13 +115,13 @@
     
     <div class="article-meta">
       
-	<a href="/2017/05/02/03-Theano-02/" class="article-date">
-	  <time datetime="2017-05-02T07:30:16.000Z" itemprop="datePublished">五月 2, 2017</time>
+	<a href="/2017/09/09/test/" class="article-date">
+	  <time datetime="2017-09-09T15:04:03.918Z" itemprop="datePublished">九月 9, 2017</time>
 	</a>
 
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python/">Python</a>
+    <a class="article-category-link" href="/categories/辅助工具/">辅助工具</a>, <a class="article-category-link" href="/categories/辅助工具/数据分析/">数据分析</a>, <a class="article-category-link" href="/categories/辅助工具/数据分析/深度学习/">深度学习</a>, <a class="article-category-link" href="/categories/辅助工具/数据分析/深度学习/自然语言处理/">自然语言处理</a>, <a class="article-category-link" href="/categories/辅助工具/数据分析/深度学习/自然语言处理/生活/">生活</a>
  
       
 	<span id="busuanzi_container_page_pv">
@@ -146,33 +131,17 @@
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="两个标量的加法"><a href="#两个标量的加法" class="headerlink" title="两个标量的加法"></a>两个标量的加法</h1><p>为了让我们开始使用Theano，以及感受theano是如何工作的。接下来，我们构造一个简单的函数：加法。</p>
-<p>##　两个标量的加法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">import numpy</div><div class="line">import theano.tensor as T</div><div class="line">import theano</div><div class="line">from theano import function</div><div class="line"></div><div class="line"># 定义两个符号（变量）x, y来表示你想实施加法的数。</div><div class="line"># 换句话说， x,y,z均为变量对象。</div><div class="line"># 在Theano中，所有的符号必须定义类型。</div><div class="line"># T.dscalar: 表示双精度（doubles)的0维数组（标量），他是Theano中的类型(Type)</div><div class="line">x = T.dscalar(&apos;x&apos;)</div><div class="line">y = T.dscalar(&apos;y&apos;)</div><div class="line">z = x + y</div><div class="line"># dscalar不是一个类(class)。因此，事实上x,y都不是dscalr的实例。</div><div class="line"># 它们是TensorVariable的实例。</div><div class="line"># 然而，x,y被赋值为theano的dscalar类型。</div><div class="line">type(x)  # theano.tensor.var.TensorVariable</div><div class="line">x.type  # TensorType(float64, scalar)</div><div class="line">T.dscalar   # TensorType(float64, scalar)</div><div class="line">x.type is T.dscalar # True</div><div class="line"></div><div class="line"># 在你运行f时，你会注意到有些延迟</div><div class="line"># 因为f正在被编译为C代码</div><div class="line">f = function([x, y], z)</div><div class="line">f(2, 3)</div><div class="line">numpy.allclose(f(16.3, 12.1), 28.4)</div><div class="line">numpy.allcolse(z.eval(&#123;x: 16.3, y: 12.1&#125;), 28.4)</div></pre></td></tr></table></figure></p>
-<a id="more"></a>
-<h2 id="两个矩阵的加法"><a href="#两个矩阵的加法" class="headerlink" title="两个矩阵的加法"></a>两个矩阵的加法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">x = T.dmatrix(&apos;x&apos;)</div><div class="line">y = T.dmatrix(&apos;y&apos;)</div><div class="line">z = x + y</div><div class="line">f = function([x, y], z)</div><div class="line">f([[1, 2], [3, 4]], [[10, 20], [30, 40]])</div></pre></td></tr></table></figure>
-<h2 id="可以用到的类型-type-："><a href="#可以用到的类型-type-：" class="headerlink" title="可以用到的类型(type)："></a>可以用到的类型(type)：</h2><ul>
-<li>byte: bscalar, bvector, bmatrix, brow, bcol, btensor3, btensor4, btensro5</li>
-<li>16-bit intergers: wscalar, wvector, wmatrix, wrow, wcol, wtensor3, wtensor4, wtensor5</li>
-<li>32-bit intergers: iscalar, ivector, imatrix, irow, icol, itensor3, itensor4, itensor5</li>
-<li>64-bit intergers: lscalar, lvector, lmatrix, lrow, lcol, ltensor3, ltensor4, ltensor5</li>
-<li>float: fscalar, fvector, fmatrix, frow, fcol, ftensor3, ftensor4, ftensor5</li>
-<li>double: dscalar, dvector, dmatrix, drow, dcol, dtensor3, dtensor4, dtensor5</li>
-<li>complex: cscalar, cvector, cmatrix, crow, ccol, ctensor3, ctensor4, ctensor5</li>
-</ul>
-<h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">a = theano.tensor.vector()  # 声明一个变量</div><div class="line">out = a + a ** 10   # 构造一个符号表达式</div><div class="line">f = theano.function([a], out)   # 编译一个函数</div><div class="line">print(f([0, 1, 2]))</div></pre></td></tr></table></figure>
-<p>修正并执行上面的代码，使得其能够计算：a ^ 2 + b ^ 2 + 2ab</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">a = theano.tensor.vector()</div><div class="line">b = theano.tensor.vector()</div><div class="line">out1 = a ** 2 + b ** 2 + 2 * a * b</div><div class="line">out2 = (a + b) ** 2</div><div class="line">f1 = theano.function([a, b], out1)</div><div class="line">f2 = theano.function([a, b], out2)</div><div class="line">print(f1([0, 1], [1, 2]))</div><div class="line">print(f2([0, 1], [1, 2]))</div></pre></td></tr></table></figure>
+        <p>Simple inline $a = b + c$.</p>
+<p>$$\frac{\partial u}{\partial t}$$</p>
+
       
     </div>
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python/">Python</a>
+    <a class="article-category-link" href="/categories/辅助工具/">辅助工具</a>, <a class="article-category-link" href="/categories/辅助工具/数据分析/">数据分析</a>, <a class="article-category-link" href="/categories/辅助工具/数据分析/深度学习/">深度学习</a>, <a class="article-category-link" href="/categories/辅助工具/数据分析/深度学习/自然语言处理/">自然语言处理</a>, <a class="article-category-link" href="/categories/辅助工具/数据分析/深度学习/自然语言处理/生活/">生活</a>
 
       
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Theano/">Theano</a></li></ul>
-
       
         
 	<div id="comment">
@@ -206,19 +175,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2017/05/03/04-Theano-03/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">上一篇</strong>
-      <div class="article-nav-title">
-        
-          Theano - 更多的例子
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/05/01/02-Theano-01/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2017/08/24/14-pearson_vs_spearman/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title">Theano - numpy新手</div>
+      <div class="article-nav-title">Pearson相关系数Vs.Spearman相关系数</div>
     </a>
   
 </nav>
@@ -232,7 +192,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#两个标量的加法"><span class="nav-number">1.</span> <span class="nav-text">两个标量的加法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#两个矩阵的加法"><span class="nav-number">1.1.</span> <span class="nav-text">两个矩阵的加法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可以用到的类型-type-："><span class="nav-number">1.2.</span> <span class="nav-text">可以用到的类型(type)：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#练习"><span class="nav-number">2.</span> <span class="nav-text">练习</span></a></li></ol>
+      <ol class="nav">无</ol>
     
     </div>
   </aside>
