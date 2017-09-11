@@ -18,7 +18,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/08/24/15-cs224n_note1/index.html">
 <meta property="og:site_name" content="League of Data">
 <meta property="og:description" content="Problem 1: Softmax1.1 (a) 数值稳定性Prove: softmax的数值稳定性，即对任意的输入向量$x$和任意的常数$c$，softmax($x$) = softmax($x + c$)，$x + c$代表对向量$x$的每一个元素都加上常数$c$。其中， $$\begin{equation}     softmax(x)_{i} = \frac{e^{x_{i}}}{\su">
-<meta property="og:updated_time" content="2017-09-11T14:19:38.849Z">
+<meta property="og:updated_time" content="2017-09-11T14:33:00.292Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS224N - 自然语言处理-word2vec">
 <meta name="twitter:description" content="Problem 1: Softmax1.1 (a) 数值稳定性Prove: softmax的数值稳定性，即对任意的输入向量$x$和任意的常数$c$，softmax($x$) = softmax($x + c$)，$x + c$代表对向量$x$的每一个元素都加上常数$c$。其中， $$\begin{equation}     softmax(x)_{i} = \frac{e^{x_{i}}}{\su">
@@ -160,7 +160,7 @@
     %
               &amp;= \frac{e^{x}}{(1 + e^{x})^{2}}  = \sigma(x) \times (1 - \sigma(x)) \nonumber 
 \end{align}$$</span><!-- Has MathJax --></p>
-<h2 id="2-2-b-交叉熵损失函数"><a href="#2-2-b-交叉熵损失函数" class="headerlink" title="2.2 (b) 交叉熵损失函数"></a>2.2 (b) 交叉熵损失函数</h2><p>推导交叉熵损失函数$CE(\mathbf{y},\hat{\mathbf{y}}) = - \sum<em>{i} y</em>{i} \times log(\hat{y_{i}})$的梯度。 其中，$\hat{\mathbf{y}} = softmax(\mathbf{\theta})$，为所有分类类别的预测概率向量，$\mathbf{y}$为one-hot标签向量，$\hat{\mathbf{y}}$ 。</p>
+<h2 id="2-2-b-交叉熵损失函数"><a href="#2-2-b-交叉熵损失函数" class="headerlink" title="2.2 (b) 交叉熵损失函数"></a>2.2 (b) 交叉熵损失函数</h2><p>推导交叉熵损失函数<span>$CE(\mathbf{y},\hat{\mathbf{y}}) = - \sum_{i} y_{i} \times log(\hat{y_{i}})$</span><!-- Has MathJax -->的梯度。 其中，<span>$\hat{\mathbf{y}} = softmax(\mathbf{\theta})$</span><!-- Has MathJax -->，为所有分类类别的预测概率向量，<span>$\mathbf{y}$</span><!-- Has MathJax -->为one-hot标签向量，<span>$\hat{\mathbf{y}}$</span><!-- Has MathJax --> 。</p>
 <p><strong>Answer:</strong><br>取$S$代表Softmax函数：<br><span>$$\begin{align}
     f_{i} &amp;= e^{\theta_{i}} \nonumber \\
     %
@@ -204,14 +204,15 @@
     %
         &amp;= S_{i}(\sum_{k} y_{k}) - y_{i} \nonumber
 \end{align}$$</span><!-- Has MathJax --></p>
-<p>因为$\sum<em>{k}y</em>{k} = 1$，所以：<br><span>$$\begin{align}
+<p>因为<span>$\sum_{k} y_{k} = 1$</span><!-- Has MathJax -->，所以：<br><span>$$\begin{align}
     \frac{\partial L}{\partial \theta_{i}} % 
             &amp;= S_{i} - y_{i} \nonumber
 \end{align}$$</span><!-- Has MathJax --></p>
 <h2 id="2-3-c-单个隐藏层的梯度-One-Hidden-Layer-Gradient"><a href="#2-3-c-单个隐藏层的梯度-One-Hidden-Layer-Gradient" class="headerlink" title="2.3 (c) 单个隐藏层的梯度 (One Hidden Layer Gradient)"></a>2.3 (c) 单个隐藏层的梯度 (One Hidden Layer Gradient)</h2><p>推导输入为$\mathbf{x}$，隐藏层的激活函数为sigmoid，输出层为softmax的单层圣经网络的梯度。假定one-hot标签向量为$\mathbf{y}$，损失函数为交叉熵。其中，前向传播如下：<br><span>$$\begin{align}
     \mathbf{h} &amp;= sigmoid(\mathbf{xW}_{1} + \mathbf{b}_{1}) &amp; \hat{\mathbf{y}} = softmax(\mathbf{hW}_{2} + \mathbf{b}_{2}) \nonumber
 \end{align}$$</span><!-- Has MathJax --></p>
-<p><strong>Answer:</strong><br>令$f<em>{2} = \mathbf{xW}</em>{1} + \mathbf{b}<em>{1}$，$f</em>{3} = \mathbf{hW}<em>{2} + \mathbf{b}</em>{2}$;<br><span>$$\begin{align}
+<p><strong>Answer:</strong><br>令<span>$f_{2} = \mathbf{xW}_{1} + \mathbf{b}_{1}$</span><!-- Has MathJax -->，<span>$f_{3} = \mathbf{hW}_{2} + \mathbf{b}_{2}$</span><!-- Has MathJax -->;</p>
+<span>$$\begin{align}
     \frac{\partial J}{\partial f_{3}} %
         &amp;= \mathbf{\delta}_{3} = \hat{\mathbf{y}} - \mathbf{y} \nonumber \\
     %
@@ -225,8 +226,8 @@
         &amp;= \mathbf{\delta}_{1} \frac{\partial f_{2}}{\partial \mathbf{x}} \nonumber \\
     %
         &amp;= \mathbf{\delta}_{1}  \mathbf{W}_{1}^{T} \nonumber
-\end{align}$$</span><!-- Has MathJax --></p>
-<h2 id="2-4-d-参数个数-Number-of-Parameters"><a href="#2-4-d-参数个数-Number-of-Parameters" class="headerlink" title="2.4 (d) 参数个数(Number of Parameters)"></a>2.4 (d) 参数个数(Number of Parameters)</h2><p>在上面(c)中的神经网络，有多少个参数？假定输入为$D<em>{x}$维，输出为$D</em>{y}$维，隐藏层共有$H$个神经单元。</p>
+\end{align}$$</span><!-- Has MathJax -->
+<h2 id="2-4-d-参数个数-Number-of-Parameters"><a href="#2-4-d-参数个数-Number-of-Parameters" class="headerlink" title="2.4 (d) 参数个数(Number of Parameters)"></a>2.4 (d) 参数个数(Number of Parameters)</h2><p>在上面(c)中的神经网络，有多少个参数？假定输入为<span>$D_{x}$</span><!-- Has MathJax -->维，输出为<span>$D_{y}$</span><!-- Has MathJax -->维，隐藏层共有$H$个神经单元。</p>
 <p><strong>Answer:</strong><br><span>$$\begin{align}
     n_{W_{1}} &amp;= D_{x} \times H \nonumber \\
     %
