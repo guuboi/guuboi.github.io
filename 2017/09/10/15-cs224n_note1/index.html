@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>CS224N - 自然语言处理 - word2vec | League of Data</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="word2veccs224n" />
+  
+  
+  
+  
+  <meta name="description" content="Problem 1: Softmax1.1 (a) 数值稳定性Prove: softmax的数值稳定性，即对任意的输入向量$x$和任意的常数$c$，softmax($x$) = softmax($x + c$)，$x + c$代表对向量$x$的每一个元素都加上常数$c$。其中， $$\begin{equation}     softmax(x)_{i} = \frac{e^{x_{i}}}{\su">
+<meta name="keywords" content="word2vec,cs224n">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS224N - 自然语言处理 - word2vec">
+<meta property="og:url" content="http://yoursite.com/2017/09/10/15-cs224n_note1/index.html">
+<meta property="og:site_name" content="League of Data">
+<meta property="og:description" content="Problem 1: Softmax1.1 (a) 数值稳定性Prove: softmax的数值稳定性，即对任意的输入向量$x$和任意的常数$c$，softmax($x$) = softmax($x + c$)，$x + c$代表对向量$x$的每一个元素都加上常数$c$。其中， $$\begin{equation}     softmax(x)_{i} = \frac{e^{x_{i}}}{\su">
+<meta property="og:image" content="http://yoursite.com/image/word2vec.jpg">
+<meta property="og:updated_time" content="2017-09-11T14:47:02.068Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CS224N - 自然语言处理 - word2vec">
+<meta name="twitter:description" content="Problem 1: Softmax1.1 (a) 数值稳定性Prove: softmax的数值稳定性，即对任意的输入向量$x$和任意的常数$c$，softmax($x$) = softmax($x + c$)，$x + c$代表对向量$x$的每一个元素都加上常数$c$。其中， $$\begin{equation}     softmax(x)_{i} = \frac{e^{x_{i}}}{\su">
+<meta name="twitter:image" content="http://yoursite.com/image/word2vec.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="League of Data" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+
+
+<header id="allheader" class="site-header" role="banner" 
+   >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" title="League of Data" rel="home"> League of Data </a>
+            
+          </h1>
+          
+          
+            <div class="site-description">HOW NOT TO BE WRONG ?</div>
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">首页</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">归档</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">关于</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-15-cs224n_note1" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="/image/word2vec.jpg" rel="gallery_cj7ga96qy0011mow4fbzwcthv">
+        <img src="/image/word2vec.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      CS224N - 自然语言处理 - word2vec
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2017/09/10/15-cs224n_note1/" class="article-date">
+	  <time datetime="2017-09-10T07:30:16.000Z" itemprop="datePublished">九月 10, 2017</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/自然语言处理/">自然语言处理</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Problem-1-Softmax"><a href="#Problem-1-Softmax" class="headerlink" title="Problem 1: Softmax"></a>Problem 1: Softmax</h1><h2 id="1-1-a-数值稳定性"><a href="#1-1-a-数值稳定性" class="headerlink" title="1.1 (a) 数值稳定性"></a>1.1 (a) 数值稳定性</h2><p><strong>Prove:</strong> softmax的数值稳定性，即对任意的输入向量$x$和任意的常数$c$，softmax($x$) = softmax($x + c$)，$x + c$代表对向量$x$的每一个元素都加上常数$c$。其中，</p>
+<span>$$\begin{equation}
+    softmax(x)_{i} = \frac{e^{x_{i}}}{\sum_{j} e^{x_{j}}}
+\end{equation}$$</span><!-- Has MathJax -->
+<a id="more"></a>
+<p><strong>Answer:</strong><br>我们可以通过提取因子$c$，然后进行消除进行证明，如下：</p>
+<span>$$\begin{align}
+    softmax(x + c)_{i} &amp;= \frac{e^{x_{i} + c}}{\sum_{j} e^{x_{j} + c}} %
+                        = \frac{e^{x_{i}} \times e^{c}}{e^{c} \times \sum_{j} e^{x_{j}}} \nonumber \\
+    %
+                       &amp;= softmax(x)_{i} \nonumber
+\end{align}$$</span><!-- Has MathJax -->
+<h2 id="1-2-b-python程序实现Softmax"><a href="#1-2-b-python程序实现Softmax" class="headerlink" title="1.2 (b) python程序实现Softmax"></a>1.2 (b) python程序实现Softmax</h2><p>给定一个$M$行$N$列的输入矩阵，利用Sonftmax的数值稳定性计算每行的softmax:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">import numpy as np</div><div class="line"></div><div class="line"></div><div class="line">def softmax(x):</div><div class="line">    &quot;&quot;&quot;Compute the softmax function for each row of the input x.</div><div class="line"></div><div class="line">    You should also make sure that your code works for a single</div><div class="line">    N-dimensional vector (treat the vector as a single row) and</div><div class="line">    for M x N matrices. This may be useful for testing later. Also,</div><div class="line">    make sure that the dimensions of the output match the input.</div><div class="line"></div><div class="line">    You must implement the optimization in problem 1(a) of the</div><div class="line">    written assignment!</div><div class="line"></div><div class="line">    Arguments:</div><div class="line">    x -- A N dimensional vector or M x N dimensional numpy matrix.</div><div class="line"></div><div class="line">    Return:</div><div class="line">    x -- You are allowed to modify x in-place</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    orig_shape = x.shape</div><div class="line"></div><div class="line">    if len(x.shape) &gt; 1:</div><div class="line">        # Matrix</div><div class="line">        exp_minmax = lambda x: np.exp(x - np.max(x))</div><div class="line">        denom = lambda x: 1.0 / np.sum(x)</div><div class="line">        x = np.apply_along_axis(exp_minmax, 1, x)</div><div class="line">        denominator = np.apply_along_axis(denom, 1, x)</div><div class="line"></div><div class="line">        if len(denominator.shape) == 1:</div><div class="line">            denominator = denominator.reshape((denominator.shape[0], 1))</div><div class="line"></div><div class="line">        x = x * denominator</div><div class="line">    else:</div><div class="line">        # Vector</div><div class="line">        x_max = np.max(x)</div><div class="line">        x = x - x_max</div><div class="line">        numerator = np.exp(x)</div><div class="line">        denominator = 1.0 / np.sum(numerator)</div><div class="line">        x = numerator.dot(denominator)</div><div class="line"></div><div class="line">    assert x.shape == orig_shape</div><div class="line">    return x</div></pre></td></tr></table></figure>
+<h1 id="Problem-2-神经网络基础知识"><a href="#Problem-2-神经网络基础知识" class="headerlink" title="Problem 2: 神经网络基础知识"></a>Problem 2: 神经网络基础知识</h1><h2 id="2-1-a-Sigmoid-Gradient-Sigmoid梯度"><a href="#2-1-a-Sigmoid-Gradient-Sigmoid梯度" class="headerlink" title="2.1 (a) Sigmoid Gradient (Sigmoid梯度)"></a>2.1 (a) Sigmoid Gradient (Sigmoid梯度)</h2><p>假定输入x为标量，推导sigmoid函数的梯度，并证明其梯度函数能够用sigmoid函数本身表示。其中，sigmoid函数为：<br>$$\sigma(x) = \frac{1}{1 + e^{-x}}$$</p>
+<p><strong>Answer:</strong><br><span>$$\begin{align}
+    \sigma(x) &amp;= \frac{1}{1 + e^{-x}} \nonumber \\
+    %
+              &amp;= \frac{e^{x}}{1 + e^{x}} \nonumber \\
+    %
+    \frac{\partial}{\partial x} \sigma(x) &amp;= \frac{e^{x} \times (1 + e^{x}) - (e^{x} \times e^{x})}{(1 + e^{x})^{2}} \nonumber \\
+    %
+              &amp;= \frac{e^{x} + (e^{x} \times e^{x}) - (e^{x} \times e^{x})}{(1 + e^{x})^{2}} \nonumber \\
+    %
+              &amp;= \frac{e^{x}}{(1 + e^{x})^{2}}  = \sigma(x) \times (1 - \sigma(x)) \nonumber 
+\end{align}$$</span><!-- Has MathJax --></p>
+<h2 id="2-2-b-交叉熵损失函数"><a href="#2-2-b-交叉熵损失函数" class="headerlink" title="2.2 (b) 交叉熵损失函数"></a>2.2 (b) 交叉熵损失函数</h2><p>推导交叉熵损失函数<span>$CE(\mathbf{y},\hat{\mathbf{y}}) = - \sum_{i} y_{i} \times log(\hat{y_{i}})$</span><!-- Has MathJax -->的梯度。 其中，<span>$\hat{\mathbf{y}} = softmax(\mathbf{\theta})$</span><!-- Has MathJax -->，为所有分类类别的预测概率向量，<span>$\mathbf{y}$</span><!-- Has MathJax -->为one-hot标签向量。</p>
+<p><strong>Answer:</strong><br>取$S$代表Softmax函数：<br><span>$$\begin{align}
+    f_{i} &amp;= e^{\theta_{i}} \nonumber \\
+    %
+    g_{i} &amp;= \sum_{k=1}^{K} e^{\theta_{k}} \nonumber \\
+    %
+    S_{i} &amp;= \frac{f_{i}}{g_{i}} \nonumber \\
+    %
+    \frac{\partial S_{i}}{\partial \theta_{j}} &amp;= \frac{f&apos;_{i} g_{i} - g&apos;_{i} f_{i}}{g_{i}^{2}} \nonumber
+\end{align}$$</span><!-- Has MathJax --></p>
+<p>当$i$ = $j$时：<br><span>$$\begin{align}
+    f&apos;_{i} &amp;= f_{i}; g&apos;_{i} = e^{\theta_{j}} \nonumber \\
+    %
+    \frac{\partial S_{i}}{\partial \theta_{j}} %
+        &amp;= \frac{e^{\theta_{i}} \sum_{k} e^{\theta_{k}} - e^{\theta_{j}} e^{\theta_{i}}}{(\sum_{k} e^{\theta_{k}})^{2}} \nonumber \\
+    %
+           &amp;= \frac{e^{\theta_{i}}}{\sum_{k} e^{\theta_{k}}} \times \frac{\sum_{k} e^{\theta_{k}} - e^{\theta_{j}}}{\sum_{k} e^{\theta_{k}}} \nonumber \\
+    %
+           &amp;= S_{i} \times (1 - S_{i}) \nonumber
+\end{align}$$</span><!-- Has MathJax --></p>
+<p>当 $i \ne j$时：<br><span>$$\begin{align}
+    \frac{\partial S_{i}}{\partial \theta_{j}} %
+        &amp;= \frac{0 - e^{\theta_{j}} e^{\theta_{i}}}{(\sum_{k} e^{\theta_{k}})^{2}} \nonumber \\
+    %
+        &amp;= - \frac{e^{\theta_{j}}}{\sum_{k} e^{\theta_{k}}} \times \frac{e^{\theta_{i}}}{\sum_{k} e^{\theta_{k}}} \nonumber \\
+    %
+        &amp;= -S_{j} \times S_{i} \nonumber
+\end{align}$$</span><!-- Has MathJax --></p>
+<p>用$L$代表交叉损失函数，则：<br><span>$$\begin{align}
+    \frac{\partial L}{\partial \theta_{i}} % 
+        &amp;= - \sum_{k} y_{k} \frac{\partial log S_{k}}{\partial \theta_{i}}  \nonumber \\
+    %
+        &amp;= - \sum_{k} y_{k} \frac{1}{S_{k}} \frac{\partial S_{k}}{\partial \theta_{i}} \nonumber \\
+    %
+        &amp;= - y_{i} (1 - S_{i}) - \sum_{k \ne i} y_{k} \frac{1}{S_{k}} (-S_{k} \times S_{i}) \nonumber \\
+    % 
+        &amp;= - y_{i} (1 - S_{i}) + \sum_{k \ne i} y_{k} S_{i} \nonumber \\
+    %
+        &amp;= - y_{i} + y_{i} S_{i} + \sum_{k \ne i} y_{k} S_{i} \nonumber \\
+    %
+        &amp;= S_{i}(\sum_{k} y_{k}) - y_{i} \nonumber
+\end{align}$$</span><!-- Has MathJax --></p>
+<p>因为<span>$\sum_{k} y_{k} = 1$</span><!-- Has MathJax -->，所以：<br><span>$$\begin{align}
+    \frac{\partial L}{\partial \theta_{i}} % 
+            &amp;= S_{i} - y_{i} \nonumber
+\end{align}$$</span><!-- Has MathJax --></p>
+<h2 id="2-3-c-单个隐藏层的梯度-One-Hidden-Layer-Gradient"><a href="#2-3-c-单个隐藏层的梯度-One-Hidden-Layer-Gradient" class="headerlink" title="2.3 (c) 单个隐藏层的梯度 (One Hidden Layer Gradient)"></a>2.3 (c) 单个隐藏层的梯度 (One Hidden Layer Gradient)</h2><p>推导输入为$\mathbf{x}$，隐藏层的激活函数为sigmoid，输出层为softmax的单层圣经网络的梯度。假定one-hot标签向量为$\mathbf{y}$，损失函数为交叉熵。其中，前向传播如下：<br><span>$$\begin{align}
+    \mathbf{h} &amp;= sigmoid(\mathbf{xW}_{1} + \mathbf{b}_{1}) &amp; \hat{\mathbf{y}} = softmax(\mathbf{hW}_{2} + \mathbf{b}_{2}) \nonumber
+\end{align}$$</span><!-- Has MathJax --></p>
+<p><strong>Answer:</strong><br>令<span>$f_{2} = \mathbf{xW}_{1} + \mathbf{b}_{1}$</span><!-- Has MathJax -->，<span>$f_{3} = \mathbf{hW}_{2} + \mathbf{b}_{2}$</span><!-- Has MathJax -->;</p>
+<span>$$\begin{align}
+    \frac{\partial J}{\partial f_{3}} %
+        &amp;= \mathbf{\delta}_{3} = \hat{\mathbf{y}} - \mathbf{y} \nonumber \\
+    %
+    \frac{\partial J}{\partial \mathbf{h}} %
+        &amp;= \mathbf{\delta}_{2} = \mathbf{\delta}_{3}\mathbf{W}_{2}^{T} \nonumber \\
+    %
+    \frac{\partial J}{\partial f_{2}} %
+            &amp;= \mathbf{\delta}_{1} = \mathbf{\delta}_{2} \circ \sigma&apos;(f_{2}) \nonumber \\
+    %
+    \frac{\partial J}{\partial \mathbf{x}} %
+        &amp;= \mathbf{\delta}_{1} \frac{\partial f_{2}}{\partial \mathbf{x}} \nonumber \\
+    %
+        &amp;= \mathbf{\delta}_{1}  \mathbf{W}_{1}^{T} \nonumber
+\end{align}$$</span><!-- Has MathJax -->
+<h2 id="2-4-d-参数个数-Number-of-Parameters"><a href="#2-4-d-参数个数-Number-of-Parameters" class="headerlink" title="2.4 (d) 参数个数(Number of Parameters)"></a>2.4 (d) 参数个数(Number of Parameters)</h2><p>在上面(c)中的神经网络，有多少个参数？假定输入为<span>$D_{x}$</span><!-- Has MathJax -->维，输出为<span>$D_{y}$</span><!-- Has MathJax -->维，隐藏层共有$H$个神经单元。</p>
+<p><strong>Answer:</strong><br><span>$$\begin{align}
+    n_{W_{1}} &amp;= D_{x} \times H \nonumber \\
+    %
+    n_{b_{1}} &amp;= H \nonumber \\
+    %
+    n_{W_{2}} &amp;= H \times D_{y} \nonumber \\
+    %
+    n_{b_{2}} &amp;= D_{y} \nonumber \\
+    %
+    N &amp;= (D_{x} \times H) + H + (H \times D_{y}) + D_{y} \nonumber
+\end{align}$$</span><!-- Has MathJax --></p>
+<h2 id="2-5-e-pyhton代码实现Sigmoid"><a href="#2-5-e-pyhton代码实现Sigmoid" class="headerlink" title="2.5 (e) pyhton代码实现Sigmoid"></a>2.5 (e) pyhton代码实现Sigmoid</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">import numpy as np</div><div class="line"></div><div class="line">def sigmoid(x):</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    Compute the sigmoid function for the input here.</div><div class="line"></div><div class="line">    Arguments:</div><div class="line">    x -- A scalar or numpy array.</div><div class="line"></div><div class="line">    Return:</div><div class="line">    s -- sigmoid(x)</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    s = 1.0 / (1 + np.exp(-x))</div><div class="line"></div><div class="line">    return s</div><div class="line"></div><div class="line"></div><div class="line">def sigmoid_grad(s):</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    Compute the gradient for the sigmoid function here. Note that</div><div class="line">    for this implementation, the input s should be the sigmoid</div><div class="line">    function value of your original input x.</div><div class="line"></div><div class="line">    Arguments:</div><div class="line">    s -- A scalar or numpy array.</div><div class="line"></div><div class="line">    Return:</div><div class="line">    ds -- Your computed gradient.</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    ds = s * (1 - s)</div><div class="line"></div><div class="line">    return ds</div></pre></td></tr></table></figure>
+<h2 id="2-6-f-Python实现梯度检验-Gradient-Check"><a href="#2-6-f-Python实现梯度检验-Gradient-Check" class="headerlink" title="2.6 (f) Python实现梯度检验(Gradient Check)"></a>2.6 (f) Python实现梯度检验(Gradient Check)</h2><p>为了方便debug，我们需要实现一个检验梯度的代码, 梯度检验的思想为梯度的极限定义，如下图所示：</p>
+<p><img src="/image/grad_check.jpg" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">import numpy as np</div><div class="line">import random</div><div class="line"></div><div class="line"></div><div class="line"># First implement a gradient checker by filling in the following functions</div><div class="line">def gradcheck_naive(f, x):</div><div class="line">    &quot;&quot;&quot; Gradient check for a function f.</div><div class="line"></div><div class="line">    Arguments:</div><div class="line">    f -- a function that takes a single argument and outputs the</div><div class="line">         cost and its gradients</div><div class="line">    x -- the point (numpy array) to check the gradient at</div><div class="line">    &quot;&quot;&quot;</div><div class="line"></div><div class="line">    rndstate = random.getstate()</div><div class="line">    random.setstate(rndstate)</div><div class="line">    fx, grad = f(x) # Evaluate function value at original point</div><div class="line">    h = 1e-4        # Do not change this!</div><div class="line"></div><div class="line">    # Iterate over all indexes in x</div><div class="line">    it = np.nditer(x, flags=[&apos;multi_index&apos;], op_flags=[&apos;readwrite&apos;])</div><div class="line">    while not it.finished:</div><div class="line">        ix = it.multi_index</div><div class="line"></div><div class="line">        # Try modifying x[ix] with h defined above to compute</div><div class="line">        # numerical gradients. Make sure you call random.setstate(rndstate)</div><div class="line">        # before calling f(x) each time. This will make it possible</div><div class="line">        # to test cost functions with built in randomness later.</div><div class="line"></div><div class="line">        x[ix] += h</div><div class="line"></div><div class="line">        random.setstate(rndstate)</div><div class="line">        new_f1 = f(x)[0]</div><div class="line">        x[ix] -= 2*h</div><div class="line"></div><div class="line">        random.setstate(rndstate)</div><div class="line">        new_f2 = f(x)[0]</div><div class="line">        x[ix] += h</div><div class="line"></div><div class="line">        numgrad = (new_f1 - new_f2) / (2 * h)</div><div class="line">    </div><div class="line">        # Compare gradients</div><div class="line">        reldiff = abs(numgrad - grad[ix]) / max(1, abs(numgrad), abs(grad[ix]))</div><div class="line">        if reldiff &gt; 1e-5:</div><div class="line">            print(&quot;Gradient check failed.&quot;)</div><div class="line">            print(&quot;First gradient error found at index %s&quot; % str(ix))</div><div class="line">            print(&quot;Your gradient: %f \t Numerical gradient: %f&quot; % (</div><div class="line">                grad[ix], numgrad))</div><div class="line">            return</div><div class="line"></div><div class="line">        it.iternext() # Step to next dimension</div><div class="line"></div><div class="line">    print(&quot;Gradient check passed!&quot;)</div></pre></td></tr></table></figure>
+<h2 id="2-7-g-python实现神经网络"><a href="#2-7-g-python实现神经网络" class="headerlink" title="2.7 (g) python实现神经网络"></a>2.7 (g) python实现神经网络</h2><p>实现一个由sigmoid隐藏组成的层神经网络的前向以及后向传播，并检验代码的可行性。</p>
+<p><strong>Answer:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line"># softmax, sigmoid, gradcheck_naive defined above!</div><div class="line"></div><div class="line">def forward_backward_prop(data, labels, params, dimensions):</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    Forward and backward propagation for a two-layer sigmoidal network</div><div class="line"></div><div class="line">    Compute the forward propagation for the cross entropy cost,</div><div class="line">    and backward propagation for the gradients for all parameters.</div><div class="line"></div><div class="line">    Arguments:</div><div class="line">    data -- M x Dx matrix, where each row is a training example.</div><div class="line">    labels -- M x Dy matrix, where each row is a one-hot vector.</div><div class="line">    params -- Model parameters, these are unpacked for you.</div><div class="line">    dimensions -- A tuple of input dimension, number of hidden units</div><div class="line">                  and output dimension</div><div class="line">    &quot;&quot;&quot;</div><div class="line"></div><div class="line">    ### Unpack network parameters (do not modify)</div><div class="line">    ofs = 0</div><div class="line">    Dx, H, Dy = (dimensions[0], dimensions[1], dimensions[2])</div><div class="line"></div><div class="line">    W1 = np.reshape(params[ofs:ofs+ Dx * H], (Dx, H))</div><div class="line">    ofs += Dx * H</div><div class="line">    b1 = np.reshape(params[ofs:ofs + H], (1, H))</div><div class="line">    ofs += H</div><div class="line">    W2 = np.reshape(params[ofs:ofs + H * Dy], (H, Dy))</div><div class="line">    ofs += H * Dy</div><div class="line">    b2 = np.reshape(params[ofs:ofs + Dy], (1, Dy))</div><div class="line"></div><div class="line">    ### forward propagation</div><div class="line">    h = sigmoid(np.dot(data, W1) + b1)</div><div class="line">    yhat = softmax(np.dot(h, W2) + b2)</div><div class="line"></div><div class="line">    ### backward propagation</div><div class="line">    cost = np.sum(-np.log(yhat[labels==1])) / data.shape[0]</div><div class="line"></div><div class="line">    d3 = (yhat - labels) / data.shape[0]</div><div class="line">    gradW2 = np.dot(h.T, d3)</div><div class="line">    gradb2 = np.sum(d3, 0, keepdims=True)</div><div class="line"></div><div class="line">    dh = np.dot(d3, W2.T)</div><div class="line">    grad_h = sigmoid_grad(h) * dh</div><div class="line"></div><div class="line">    gradW1 = np.dot(data.T,grad_h)</div><div class="line">    gradb1 = np.sum(grad_h,0)</div><div class="line">    ### END YOUR CODE</div><div class="line"></div><div class="line">    ### Stack gradients (do not modify)</div><div class="line">    grad = np.concatenate((gradW1.flatten(), gradb1.flatten(),</div><div class="line">        gradW2.flatten(), gradb2.flatten()))</div><div class="line"></div><div class="line">    return cost, grad</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/自然语言处理/">自然语言处理</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cs224n/">cs224n</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/word2vec/">word2vec</a></li></ul>
+
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/08/24/14-pearson_vs_spearman/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">Pearson相关系数Vs.Spearman相关系数</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Problem-1-Softmax"><span class="nav-number">1.</span> <span class="nav-text">Problem 1: Softmax</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-a-数值稳定性"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 (a) 数值稳定性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-b-python程序实现Softmax"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 (b) python程序实现Softmax</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Problem-2-神经网络基础知识"><span class="nav-number">2.</span> <span class="nav-text">Problem 2: 神经网络基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-a-Sigmoid-Gradient-Sigmoid梯度"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 (a) Sigmoid Gradient (Sigmoid梯度)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-b-交叉熵损失函数"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 (b) 交叉熵损失函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-c-单个隐藏层的梯度-One-Hidden-Layer-Gradient"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 (c) 单个隐藏层的梯度 (One Hidden Layer Gradient)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-d-参数个数-Number-of-Parameters"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 (d) 参数个数(Number of Parameters)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-e-pyhton代码实现Sigmoid"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 (e) pyhton代码实现Sigmoid</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-6-f-Python实现梯度检验-Gradient-Check"><span class="nav-number">2.6.</span> <span class="nav-text">2.6 (f) Python实现梯度检验(Gradient Check)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-7-g-python实现神经网络"><span class="nav-number">2.7.</span> <span class="nav-text">2.7 (g) python实现神经网络</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2017 League of Data All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>
