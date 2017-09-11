@@ -18,7 +18,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/08/24/15-cs224n_note1/index.html">
 <meta property="og:site_name" content="League of Data">
 <meta property="og:description" content="Problem 1: Softmax1.1 (a) 数值稳定性Prove: softmax的数值稳定性，即对任意的输入向量$x$和任意的常数$c$，softmax($x$) = softmax($x + c$)，$x + c$代表对向量$x$的每一个元素都加上常数$c$。其中， $$\begin{equation}     softmax(x)_{i} = \frac{e^{x_{i}}}{\su">
-<meta property="og:updated_time" content="2017-09-11T13:48:48.368Z">
+<meta property="og:updated_time" content="2017-09-11T14:09:04.029Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS224N - 自然语言处理-word2vec">
 <meta name="twitter:description" content="Problem 1: Softmax1.1 (a) 数值稳定性Prove: softmax的数值稳定性，即对任意的输入向量$x$和任意的常数$c$，softmax($x$) = softmax($x + c$)，$x + c$代表对向量$x$的每一个元素都加上常数$c$。其中， $$\begin{equation}     softmax(x)_{i} = \frac{e^{x_{i}}}{\su">
@@ -149,10 +149,7 @@
 <h2 id="1-2-b-python程序实现Softmax"><a href="#1-2-b-python程序实现Softmax" class="headerlink" title="1.2 (b) python程序实现Softmax"></a>1.2 (b) python程序实现Softmax</h2><p>给定一个$M$行$N$列的输入矩阵，利用Sonftmax的数值稳定性计算每行的softmax:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">import numpy as np</div><div class="line"></div><div class="line"></div><div class="line">def softmax(x):</div><div class="line">    &quot;&quot;&quot;Compute the softmax function for each row of the input x.</div><div class="line"></div><div class="line">    You should also make sure that your code works for a single</div><div class="line">    N-dimensional vector (treat the vector as a single row) and</div><div class="line">    for M x N matrices. This may be useful for testing later. Also,</div><div class="line">    make sure that the dimensions of the output match the input.</div><div class="line"></div><div class="line">    You must implement the optimization in problem 1(a) of the</div><div class="line">    written assignment!</div><div class="line"></div><div class="line">    Arguments:</div><div class="line">    x -- A N dimensional vector or M x N dimensional numpy matrix.</div><div class="line"></div><div class="line">    Return:</div><div class="line">    x -- You are allowed to modify x in-place</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    orig_shape = x.shape</div><div class="line"></div><div class="line">    if len(x.shape) &gt; 1:</div><div class="line">        # Matrix</div><div class="line">        exp_minmax = lambda x: np.exp(x - np.max(x))</div><div class="line">        denom = lambda x: 1.0 / np.sum(x)</div><div class="line">        x = np.apply_along_axis(exp_minmax, 1, x)</div><div class="line">        denominator = np.apply_along_axis(denom, 1, x)</div><div class="line"></div><div class="line">        if len(denominator.shape) == 1:</div><div class="line">            denominator = denominator.reshape((denominator.shape[0], 1))</div><div class="line"></div><div class="line">        x = x * denominator</div><div class="line">    else:</div><div class="line">        # Vector</div><div class="line">        x_max = np.max(x)</div><div class="line">        x = x - x_max</div><div class="line">        numerator = np.exp(x)</div><div class="line">        denominator = 1.0 / np.sum(numerator)</div><div class="line">        x = numerator.dot(denominator)</div><div class="line"></div><div class="line">    assert x.shape == orig_shape</div><div class="line">    return x</div></pre></td></tr></table></figure>
 <h1 id="Problem-2-神经网络基础知识"><a href="#Problem-2-神经网络基础知识" class="headerlink" title="Problem 2: 神经网络基础知识"></a>Problem 2: 神经网络基础知识</h1><h2 id="2-1-a-Sigmoid-Gradient-Sigmoid梯度"><a href="#2-1-a-Sigmoid-Gradient-Sigmoid梯度" class="headerlink" title="2.1 (a) Sigmoid Gradient (Sigmoid梯度)"></a>2.1 (a) Sigmoid Gradient (Sigmoid梯度)</h2><p>假定输入x为标量，推导sigmoid函数的梯度，并证明其梯度函数能够用sigmoid函数本身表示。其中，sigmoid函数为：<br>$$\sigma(x) = \frac{1}{1 + e^{-x}}$$</p>
-<p><strong>Answer:</strong><br><span>$$\begin{equation}
-    \sigma(x) = \frac{1}{1 + e^{-x}}
-\end{equation}$$</span><!-- Has MathJax --></p>
-<span>$$\begin{align}
+<p><strong>Answer:</strong><br><span>$$\begin{align}
     \sigma(x) &amp;= \frac{1}{1 + e^{-x}} \nonumber \\
     %
               &amp;= \frac{e^{x}}{1 + e^{x}} \nonumber \\
@@ -162,7 +159,7 @@
               &amp;= \frac{e^{x} + (e^{x} \times e^{x}) - (e^{x} \times e^{x})}{(1 + e^{x})^{2}} \nonumber \\
     %
               &amp;= \frac{e^{x}}{(1 + e^{x})^{2}}  = \sigma(x) \times (1 - \sigma(x)) \nonumber 
-\end{align}$$</span><!-- Has MathJax -->
+\end{align}$$</span><!-- Has MathJax --></p>
 <h2 id="2-2-b-交叉熵损失函数"><a href="#2-2-b-交叉熵损失函数" class="headerlink" title="2.2 (b) 交叉熵损失函数"></a>2.2 (b) 交叉熵损失函数</h2><p>推导交叉熵损失函数$CE(\mathbf{y},\hat{\mathbf{y}}) = - \sum<em>{i} y</em>{i} \times log(\hat{y_{i}})$的梯度。 其中，$\hat{\mathbf{y}} = softmax(\bm{\theta})$，为所有分类类别的预测概率向量，$\mathbf{y}$为one-hot标签向量，$\hat{\mathbf{y}}$ 。</p>
 <p><strong>Answer:</strong><br>取$S$代表Softmax函数：<br><span>$$\begin{align}
     f_{i} &amp;= e^{\theta_{i}} \nonumber \\
@@ -174,9 +171,12 @@
     \frac{\partial S_{i}}{\partial \theta_{j}} &amp;= \frac{f&apos;_{i} g_{i} - g&apos;_{i} f_{i}}{g_{i}^{2}} \nonumber
 \end{align}$$</span><!-- Has MathJax --></p>
 <p>当$i$ = $j$时：<br><span>$$\begin{align}
-    f&apos;_{i} &amp;= f_{i}; \hspace*{5pt} g&apos;_{i} = e^{\theta_{j}} \nonumber \\
+    f&apos;_{i} &amp;= f_{i} \nonumber \\ 
     %
-    \frac{\partial S_{i}}{\partial \theta_{j}} &amp;= \frac{e^{\theta_{i}} \sum_{k} e^{\theta_{k}} - e^{\theta_{j}} e^{\theta_{i}} }{ (\sum_{k} e^{\theta_{k}})^{2} } \nonumber \\
+    g&apos;_{i} = e^{\theta_{j}} \nonumber \\
+    %
+    \frac{\partial S_{i}}{\partial \theta_{j}} %
+        &amp;= \frac{e^{\theta_{i}} \sum_{k} e^{\theta_{k}} - e^{\theta_{j}} e^{\theta_{i}}}{(\sum_{k} e^{\theta_{k}})^{2}} \nonumber \\
     %
            &amp;= \frac{e^{\theta_{i}}}{\sum_{k} e^{\theta_{k}}} \times \frac{\sum_{k} e^{\theta_{k}} - e^{\theta_{j}}}{\sum_{k} e^{\theta_{k}}} \nonumber \\
     %
@@ -204,11 +204,11 @@
     %
         &amp;= S_{i}(\sum_{k} y_{k}) - y_{i} \nonumber
 \end{align}$$</span><!-- Has MathJax --></p>
-<p>因为$\sum<em>{k} y</em>{k} = 1$，所以：<br><span>$$\begin{align}
+<p>因为$\sum<em>{k}y</em>{k} = 1$，所以：<br><span>$$\begin{align}
     \frac{\partial L}{\partial \theta_{i}} % 
             &amp;= S_{i} - y_{i} \nonumber
 \end{align}$$</span><!-- Has MathJax --></p>
-<h2 id="2-3-c-单个隐藏层的梯度-One-Hidden-Layer-Gradient"><a href="#2-3-c-单个隐藏层的梯度-One-Hidden-Layer-Gradient" class="headerlink" title="2.3 (c) 单个隐藏层的梯度(One Hidden Layer Gradient)"></a>2.3 (c) 单个隐藏层的梯度(One Hidden Layer Gradient)</h2><p>推导输入为$\bm{x}$，隐藏层的激活函数为sigmoid，输出层为softmax的单层圣经网络的梯度。假定one-hot标签向量为$\mathbf{y}$，损失函数为交叉熵。其中，前向传播如下：<br><span>$$\begin{align}
+<h2 id="2-3-c-单个隐藏层的梯度-One-Hidden-Layer-Gradient"><a href="#2-3-c-单个隐藏层的梯度-One-Hidden-Layer-Gradient" class="headerlink" title="2.3 (c) 单个隐藏层的梯度 (One Hidden Layer Gradient)"></a>2.3 (c) 单个隐藏层的梯度 (One Hidden Layer Gradient)</h2><p>推导输入为$\bm x$，隐藏层的激活函数为sigmoid，输出层为softmax的单层圣经网络的梯度。假定one-hot标签向量为$\mathbf{y}$，损失函数为交叉熵。其中，前向传播如下：<br><span>$$\begin{align}
     \mathbf{h} &amp;= sigmoid(\bm{xW}_{1} + \bm{b}_{1}) &amp; \hat{\bm{y}} = softmax(\bm{hW}_{2} + \bm{b}_{2}) \nonumber
 \end{align}$$</span><!-- Has MathJax --></p>
 <p><strong>Answer:</strong><br>令$f<em>{2} = \bm{xW}</em>{1} + \bm{b}<em>{1}$，$f</em>{3} = \bm{hW}<em>{2} + \bm{b}</em>{2}$;<br><span>$$\begin{align}
@@ -305,7 +305,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Problem-1-Softmax"><span class="nav-number">1.</span> <span class="nav-text">Problem 1: Softmax</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-a-数值稳定性"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 (a) 数值稳定性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-b-python程序实现Softmax"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 (b) python程序实现Softmax</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Problem-2-神经网络基础知识"><span class="nav-number">2.</span> <span class="nav-text">Problem 2: 神经网络基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-a-Sigmoid-Gradient-Sigmoid梯度"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 (a) Sigmoid Gradient (Sigmoid梯度)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-b-交叉熵损失函数"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 (b) 交叉熵损失函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-c-单个隐藏层的梯度-One-Hidden-Layer-Gradient"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 (c) 单个隐藏层的梯度(One Hidden Layer Gradient)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-d-参数个数-Number-of-Parameters"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 (d) 参数个数(Number of Parameters)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-e-pyhton代码实现Sigmoid"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 (e) pyhton代码实现Sigmoid</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-6-f-Python实现梯度检验-Gradient-Check"><span class="nav-number">2.6.</span> <span class="nav-text">2.6 (f) Python实现梯度检验(Gradient Check)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-7-g-python实现神经网络"><span class="nav-number">2.7.</span> <span class="nav-text">2.7 (g) python实现神经网络</span></a></li></ol></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Problem-1-Softmax"><span class="nav-number">1.</span> <span class="nav-text">Problem 1: Softmax</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-a-数值稳定性"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 (a) 数值稳定性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-b-python程序实现Softmax"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 (b) python程序实现Softmax</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Problem-2-神经网络基础知识"><span class="nav-number">2.</span> <span class="nav-text">Problem 2: 神经网络基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-a-Sigmoid-Gradient-Sigmoid梯度"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 (a) Sigmoid Gradient (Sigmoid梯度)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-b-交叉熵损失函数"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 (b) 交叉熵损失函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-c-单个隐藏层的梯度-One-Hidden-Layer-Gradient"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 (c) 单个隐藏层的梯度 (One Hidden Layer Gradient)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-d-参数个数-Number-of-Parameters"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 (d) 参数个数(Number of Parameters)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-e-pyhton代码实现Sigmoid"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 (e) pyhton代码实现Sigmoid</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-6-f-Python实现梯度检验-Gradient-Check"><span class="nav-number">2.6.</span> <span class="nav-text">2.6 (f) Python实现梯度检验(Gradient Check)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-7-g-python实现神经网络"><span class="nav-number">2.7.</span> <span class="nav-text">2.7 (g) python实现神经网络</span></a></li></ol></li></ol>
     
     </div>
   </aside>
