@@ -18,7 +18,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/08/24/15-cs224n_note1/index.html">
 <meta property="og:site_name" content="League of Data">
 <meta property="og:description" content="Problem 1: Softmax1.1 (a) 数值稳定性Prove: softmax的数值稳定性，即对任意的输入向量$x$和任意的常数$c$，softmax($x$) = softmax($x + c$)，$x + c$代表对向量$x$的每一个元素都加上常数$c$。其中， $$softmax(x){i} = \frac{e^{x{i}}}{\sum{j}e^{x{j}}}$$ $$\frac">
-<meta property="og:updated_time" content="2017-09-11T13:07:25.587Z">
+<meta property="og:updated_time" content="2017-09-11T13:10:45.371Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS224N - 自然语言处理-word2vec">
 <meta name="twitter:description" content="Problem 1: Softmax1.1 (a) 数值稳定性Prove: softmax的数值稳定性，即对任意的输入向量$x$和任意的常数$c$，softmax($x$) = softmax($x + c$)，$x + c$代表对向量$x$的每一个元素都加上常数$c$。其中， $$softmax(x){i} = \frac{e^{x{i}}}{\sum{j}e^{x{j}}}$$ $$\frac">
@@ -142,6 +142,13 @@
 \dot{y} &amp; = \rho x - y - xz \\
 \dot{z} &amp; = -\beta z + xy
 \end{aligned}$$</span><!-- Has MathJax -->
+<span>$$\begin{align}
+    softmax(x + c)_{i} &amp;= \frac{e^{x_{i} + c}}{\sum_{j} e^{x_{j} + c}} %
+                        = \frac{e^{x_{i}} \times e^{c}}{e^{c} \times \sum_{j} e^{x_{j}}} \nonumber \\
+    %
+                       &amp;= \frac{e^{x_{i}} \times \cancel{e^{c}}}{\cancel{e^{c}} \times \sum_{j} e^{x_{j}}} %
+                        = softmax(x)_{i} \nonumber
+\end{align}$$</span><!-- Has MathJax -->
 <a id="more"></a>
 <p><strong>Answer:</strong><br>我们可以通过提取因子$c$，然后进行消除进行证明，如下：</p>
 <p>$$<br>    softmax(x + c)<em>{i} &amp;= \frac{e^{x</em>{i} + c}}{\sum<em>{j} e^{x</em>{j} + c}} %<br>                         = \frac{e^{x<em>{i}} \times e^{c}}{e^{c} \times \sum</em>{j} e^{x<em>{j}}} \nonumber \<br>    %<br>                       &amp;= \frac{e^{x</em>{i}} \times \cancel{e^{c}}}{\cancel{e^{c}} \times \sum<em>{j} e^{x</em>{j}}} %<br>                        = softmax(x)_{i} \nonumber<br>$$</p>

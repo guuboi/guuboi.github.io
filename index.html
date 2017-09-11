@@ -140,6 +140,13 @@ $$\begin{aligned}
 \dot{y} &amp; = \rho x - y - xz \\
 \dot{z} &amp; = -\beta z + xy
 \end{aligned}$$
+$$\begin{align}
+    softmax(x + c)_{i} &amp;= \frac{e^{x_{i} + c}}{\sum_{j} e^{x_{j} + c}} %
+                        = \frac{e^{x_{i}} \times e^{c}}{e^{c} \times \sum_{j} e^{x_{j}}} \nonumber \\
+    %
+                       &amp;= \frac{e^{x_{i}} \times \cancel{e^{c}}}{\cancel{e^{c}} \times \sum_{j} e^{x_{j}}} %
+                        = softmax(x)_{i} \nonumber
+\end{align}$$
 
         
           <p class="article-more-link">
