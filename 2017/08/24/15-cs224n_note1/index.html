@@ -18,7 +18,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/08/24/15-cs224n_note1/index.html">
 <meta property="og:site_name" content="League of Data">
 <meta property="og:description" content="Problem 1: Softmax1.1 (a) 数值稳定性Prove: softmax的数值稳定性，即对任意的输入向量$x$和任意的常数$c$，softmax($x$) = softmax($x + c$)，$x + c$代表对向量$x$的每一个元素都加上常数$c$。其中， $$\begin{equation}     softmax(x)_{i} = \frac{e^{x_{i}}}{\su">
-<meta property="og:updated_time" content="2017-09-11T13:42:22.678Z">
+<meta property="og:updated_time" content="2017-09-11T13:48:48.368Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS224N - 自然语言处理-word2vec">
 <meta name="twitter:description" content="Problem 1: Softmax1.1 (a) 数值稳定性Prove: softmax的数值稳定性，即对任意的输入向量$x$和任意的常数$c$，softmax($x$) = softmax($x + c$)，$x + c$代表对向量$x$的每一个元素都加上常数$c$。其中， $$\begin{equation}     softmax(x)_{i} = \frac{e^{x_{i}}}{\su">
@@ -159,7 +159,7 @@
     %
     \frac{\partial}{\partial x} \sigma(x) &amp;= \frac{e^{x} \times (1 + e^{x}) - (e^{x} \times e^{x})}{(1 + e^{x})^{2}} \nonumber \\
     %
-              &amp;= \frac{e^{x} + \cancel{(e^{x} \times e^{x})} - \cancel{(e^{x} \times e^{x})}}{(1 + e^{x})^{2}} \nonumber \\
+              &amp;= \frac{e^{x} + (e^{x} \times e^{x}) - (e^{x} \times e^{x})}{(1 + e^{x})^{2}} \nonumber \\
     %
               &amp;= \frac{e^{x}}{(1 + e^{x})^{2}}  = \sigma(x) \times (1 - \sigma(x)) \nonumber 
 \end{align}$$</span><!-- Has MathJax -->
@@ -288,19 +288,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2017/08/24/14-pearson_vs_spearman/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">上一篇</strong>
-      <div class="article-nav-title">
-        
-          Pearson相关系数Vs.Spearman相关系数
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/07/13/11-word2vec-based-on-gensim/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2017/08/24/14-pearson_vs_spearman/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title">基于gensim的Wiki百科中文word2vec训练</div>
+      <div class="article-nav-title">Pearson相关系数Vs.Spearman相关系数</div>
     </a>
   
 </nav>
