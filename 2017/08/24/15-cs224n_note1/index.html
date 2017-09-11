@@ -18,7 +18,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/08/24/15-cs224n_note1/index.html">
 <meta property="og:site_name" content="League of Data">
 <meta property="og:description" content="Problem 1: Softmax1.1 (a) 数值稳定性Prove: softmax的数值稳定性，即对任意的输入向量$x$和任意的常数$c$，softmax($x$) = softmax($x + c$)，$x + c$代表对向量$x$的每一个元素都加上常数$c$。其中， $$\begin{equation}     softmax(x)_{i} = \frac{e^{x_{i}}}{\su">
-<meta property="og:updated_time" content="2017-09-11T13:19:32.515Z">
+<meta property="og:updated_time" content="2017-09-11T13:42:22.678Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS224N - 自然语言处理-word2vec">
 <meta name="twitter:description" content="Problem 1: Softmax1.1 (a) 数值稳定性Prove: softmax的数值稳定性，即对任意的输入向量$x$和任意的常数$c$，softmax($x$) = softmax($x + c$)，$x + c$代表对向量$x$的每一个元素都加上常数$c$。其中， $$\begin{equation}     softmax(x)_{i} = \frac{e^{x_{i}}}{\su">
@@ -149,19 +149,95 @@
 <h2 id="1-2-b-python程序实现Softmax"><a href="#1-2-b-python程序实现Softmax" class="headerlink" title="1.2 (b) python程序实现Softmax"></a>1.2 (b) python程序实现Softmax</h2><p>给定一个$M$行$N$列的输入矩阵，利用Sonftmax的数值稳定性计算每行的softmax:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">import numpy as np</div><div class="line"></div><div class="line"></div><div class="line">def softmax(x):</div><div class="line">    &quot;&quot;&quot;Compute the softmax function for each row of the input x.</div><div class="line"></div><div class="line">    You should also make sure that your code works for a single</div><div class="line">    N-dimensional vector (treat the vector as a single row) and</div><div class="line">    for M x N matrices. This may be useful for testing later. Also,</div><div class="line">    make sure that the dimensions of the output match the input.</div><div class="line"></div><div class="line">    You must implement the optimization in problem 1(a) of the</div><div class="line">    written assignment!</div><div class="line"></div><div class="line">    Arguments:</div><div class="line">    x -- A N dimensional vector or M x N dimensional numpy matrix.</div><div class="line"></div><div class="line">    Return:</div><div class="line">    x -- You are allowed to modify x in-place</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    orig_shape = x.shape</div><div class="line"></div><div class="line">    if len(x.shape) &gt; 1:</div><div class="line">        # Matrix</div><div class="line">        exp_minmax = lambda x: np.exp(x - np.max(x))</div><div class="line">        denom = lambda x: 1.0 / np.sum(x)</div><div class="line">        x = np.apply_along_axis(exp_minmax, 1, x)</div><div class="line">        denominator = np.apply_along_axis(denom, 1, x)</div><div class="line"></div><div class="line">        if len(denominator.shape) == 1:</div><div class="line">            denominator = denominator.reshape((denominator.shape[0], 1))</div><div class="line"></div><div class="line">        x = x * denominator</div><div class="line">    else:</div><div class="line">        # Vector</div><div class="line">        x_max = np.max(x)</div><div class="line">        x = x - x_max</div><div class="line">        numerator = np.exp(x)</div><div class="line">        denominator = 1.0 / np.sum(numerator)</div><div class="line">        x = numerator.dot(denominator)</div><div class="line"></div><div class="line">    assert x.shape == orig_shape</div><div class="line">    return x</div></pre></td></tr></table></figure>
 <h1 id="Problem-2-神经网络基础知识"><a href="#Problem-2-神经网络基础知识" class="headerlink" title="Problem 2: 神经网络基础知识"></a>Problem 2: 神经网络基础知识</h1><h2 id="2-1-a-Sigmoid-Gradient-Sigmoid梯度"><a href="#2-1-a-Sigmoid-Gradient-Sigmoid梯度" class="headerlink" title="2.1 (a) Sigmoid Gradient (Sigmoid梯度)"></a>2.1 (a) Sigmoid Gradient (Sigmoid梯度)</h2><p>假定输入x为标量，推导sigmoid函数的梯度，并证明其梯度函数能够用sigmoid函数本身表示。其中，sigmoid函数为：<br>$$\sigma(x) = \frac{1}{1 + e^{-x}}$$</p>
-<p><strong>Answer:</strong><br>$$\sigma(x) = \frac{1}{1 + e^{-x}} = \frac{e^{x}}{1 + e^{x}}$$</p>
-<p>$$\frac{\partial}{\partial x} \sigma(x) &amp;= \frac{e^{x} \times (1 + e^{x}) - (e^{x} \times e^{x})}{(1 + e^{x})^{2}} \nonumber \<br>    %<br>              &amp;= \frac{e^{x} + \cancel{(e^{x} \times e^{x})} - \cancel{(e^{x} \times e^{x})}}{(1 + e^{x})^{2}} \nonumber \<br>    %<br>              &amp;= \frac{e^{x}}{(1 + e^{x})^{2}}  = \sigma(x) \times (1 - \sigma(x)) \nonumber<br>$$</p>
+<p><strong>Answer:</strong><br><span>$$\begin{equation}
+    \sigma(x) = \frac{1}{1 + e^{-x}}
+\end{equation}$$</span><!-- Has MathJax --></p>
+<span>$$\begin{align}
+    \sigma(x) &amp;= \frac{1}{1 + e^{-x}} \nonumber \\
+    %
+              &amp;= \frac{e^{x}}{1 + e^{x}} \nonumber \\
+    %
+    \frac{\partial}{\partial x} \sigma(x) &amp;= \frac{e^{x} \times (1 + e^{x}) - (e^{x} \times e^{x})}{(1 + e^{x})^{2}} \nonumber \\
+    %
+              &amp;= \frac{e^{x} + \cancel{(e^{x} \times e^{x})} - \cancel{(e^{x} \times e^{x})}}{(1 + e^{x})^{2}} \nonumber \\
+    %
+              &amp;= \frac{e^{x}}{(1 + e^{x})^{2}}  = \sigma(x) \times (1 - \sigma(x)) \nonumber 
+\end{align}$$</span><!-- Has MathJax -->
 <h2 id="2-2-b-交叉熵损失函数"><a href="#2-2-b-交叉熵损失函数" class="headerlink" title="2.2 (b) 交叉熵损失函数"></a>2.2 (b) 交叉熵损失函数</h2><p>推导交叉熵损失函数$CE(\mathbf{y},\hat{\mathbf{y}}) = - \sum<em>{i} y</em>{i} \times log(\hat{y_{i}})$的梯度。 其中，$\hat{\mathbf{y}} = softmax(\bm{\theta})$，为所有分类类别的预测概率向量，$\mathbf{y}$为one-hot标签向量，$\hat{\mathbf{y}}$ 。</p>
-<p><strong>Answer:</strong><br>取$S$代表Softmax函数：<br>$$f<em>{i} &amp;= e^{\theta</em>{i}} \nonumber \<br>    %<br>    g<em>{i} &amp;= \sum</em>{k=1}^{K} e^{\theta<em>{k}} \nonumber \<br>    %<br>    S</em>{i} &amp;= \frac{f<em>{i}}{g</em>{i}} \nonumber \<br>    %<br>    \frac{\partial S<em>{i}}{\partial \theta</em>{j}} &amp;= \frac{f’<em>{i} g</em>{i} - g’<em>{i} f</em>{i}}{g_{i}^{2}} \nonumber<br>$$</p>
-<p>当$i$ = $j$时：<br>$$f’<em>{i} &amp;= f</em>{i}; \hspace*{5pt} g’<em>{i} = e^{\theta</em>{j}} \nonumber \<br>    %<br>    \frac{\partial S<em>{i}}{\partial \theta</em>{j}} &amp;= \frac{e^{\theta<em>{i}} \sum</em>{k} e^{\theta<em>{k}} - e^{\theta</em>{j}} e^{\theta<em>{i}} }{ (\sum</em>{k} e^{\theta<em>{k}})^{2} } \nonumber \<br>    %<br>           &amp;= \frac{e^{\theta</em>{i}}}{\sum<em>{k} e^{\theta</em>{k}}} \times \frac{\sum<em>{k} e^{\theta</em>{k}} - e^{\theta<em>{j}}}{\sum</em>{k} e^{\theta<em>{k}}} \nonumber \<br>    %<br>           &amp;= S</em>{i} \times (1 - S_{i}) \nonumber<br>$$</p>
-<p>当 $i \ne j$时：<br>$$\frac{\partial S<em>{i}}{\partial \theta</em>{j}} %<br>        &amp;= \frac{0 - e^{\theta<em>{j}} e^{\theta</em>{i}}}{(\sum<em>{k} e^{\theta</em>{k}})^{2}} \nonumber \<br>    %<br>        &amp;= - \frac{e^{\theta<em>{j}}}{\sum</em>{k} e^{\theta<em>{k}}} \times \frac{e^{\theta</em>{i}}}{\sum<em>{k} e^{\theta</em>{k}}} \nonumber \<br>    %<br>        &amp;= -S<em>{j} \times S</em>{i} \nonumber<br>$$</p>
-<p>用$L$代表交叉损失函数，则：<br>$$\frac{\partial L}{\partial \theta<em>{i}} %<br>        &amp;= - \sum</em>{k} y<em>{k} \frac{\partial log S</em>{k}}{\partial \theta<em>{i}}    \nonumber \<br>    %<br>        &amp;= - \sum</em>{k} y<em>{k} \frac{1}{S</em>{k}} \frac{\partial S<em>{k}}{\partial \theta</em>{i}} \nonumber \<br>    %<br>        &amp;= - y<em>{i} (1 - S</em>{i}) - \sum<em>{k \ne i} y</em>{k} \frac{1}{S<em>{k}} (-S</em>{k} \times S<em>{i}) \nonumber \<br>    %<br>        &amp;= - y</em>{i} (1 - S<em>{i}) + \sum</em>{k \ne i} y<em>{k} S</em>{i} \nonumber \<br>    %<br>        &amp;= - y<em>{i} + y</em>{i} S<em>{i} + \sum</em>{k \ne i} y<em>{k} S</em>{i} \nonumber \<br>    %<br>        &amp;= S<em>{i}(\sum</em>{k} y<em>{k}) - y</em>{i} \nonumber<br>$$</p>
-<p>因为$\sum<em>{k} y</em>{k} = 1$，所以：<br>$$\frac{\partial L}{\partial \theta<em>{i}} = S</em>{i} - y_{i}$$</p>
-<h2 id="2-3-c-单个隐藏层的梯度-One-Hidden-Layer-Gradient"><a href="#2-3-c-单个隐藏层的梯度-One-Hidden-Layer-Gradient" class="headerlink" title="2.3 (c) 单个隐藏层的梯度(One Hidden Layer Gradient)"></a>2.3 (c) 单个隐藏层的梯度(One Hidden Layer Gradient)</h2><p>推导输入为$\bm{x}$，隐藏层的激活函数为sigmoid，输出层为softmax的单层圣经网络的梯度。假定one-hot标签向量为$\mathbf{y}$，损失函数为交叉熵。其中，前向传播如下：<br>$$\mathbf{h} &amp;= sigmoid(\bm{xW}<em>{1} + \bm{b}</em>{1})$$<br>$$\hat{\bm{y}} = softmax(\bm{hW}<em>{2} + \bm{b}</em>{2})$$</p>
-<p><strong>Answer:</strong><br>令$f<em>{2} = \bm{xW}</em>{1} + \bm{b}<em>{1}$，$f</em>{3} = \bm{hW}<em>{2} + \bm{b}</em>{2}$;</p>
-<p>$$\frac{\partial J}{\partial f<em>{3}} %<br>        &amp;= \bm{\delta}</em>{3} = \hat{\bm{y}} - \bm{y} \nonumber \<br>    %<br>    \frac{\partial J}{\partial \bm{h}} %<br>        &amp;= \bm{\delta}<em>{2} = \bm{\delta}</em>{3}\bm{W}<em>{2}^{T} \nonumber \<br>    %<br>    \frac{\partial J}{\partial f</em>{2}} %<br>            &amp;= \bm{\delta}<em>{1} = \bm{\delta}</em>{2} \circ \sigma’(f<em>{2}) \nonumber \<br>    %<br>    \frac{\partial J}{\partial \bm{x}} %<br>        &amp;= \bm{\delta}</em>{1} \frac{\partial f<em>{2}}{\partial \bm{x}} \nonumber \<br>    %<br>        &amp;= \bm{\delta}</em>{1}  \bm{W}_{1}^{T} \nonumber<br>$$</p>
+<p><strong>Answer:</strong><br>取$S$代表Softmax函数：<br><span>$$\begin{align}
+    f_{i} &amp;= e^{\theta_{i}} \nonumber \\
+    %
+    g_{i} &amp;= \sum_{k=1}^{K} e^{\theta_{k}} \nonumber \\
+    %
+    S_{i} &amp;= \frac{f_{i}}{g_{i}} \nonumber \\
+    %
+    \frac{\partial S_{i}}{\partial \theta_{j}} &amp;= \frac{f&apos;_{i} g_{i} - g&apos;_{i} f_{i}}{g_{i}^{2}} \nonumber
+\end{align}$$</span><!-- Has MathJax --></p>
+<p>当$i$ = $j$时：<br><span>$$\begin{align}
+    f&apos;_{i} &amp;= f_{i}; \hspace*{5pt} g&apos;_{i} = e^{\theta_{j}} \nonumber \\
+    %
+    \frac{\partial S_{i}}{\partial \theta_{j}} &amp;= \frac{e^{\theta_{i}} \sum_{k} e^{\theta_{k}} - e^{\theta_{j}} e^{\theta_{i}} }{ (\sum_{k} e^{\theta_{k}})^{2} } \nonumber \\
+    %
+           &amp;= \frac{e^{\theta_{i}}}{\sum_{k} e^{\theta_{k}}} \times \frac{\sum_{k} e^{\theta_{k}} - e^{\theta_{j}}}{\sum_{k} e^{\theta_{k}}} \nonumber \\
+    %
+           &amp;= S_{i} \times (1 - S_{i}) \nonumber
+\end{align}$$</span><!-- Has MathJax --></p>
+<p>当 $i \ne j$时：<br><span>$$\begin{align}
+    \frac{\partial S_{i}}{\partial \theta_{j}} %
+        &amp;= \frac{0 - e^{\theta_{j}} e^{\theta_{i}}}{(\sum_{k} e^{\theta_{k}})^{2}} \nonumber \\
+    %
+        &amp;= - \frac{e^{\theta_{j}}}{\sum_{k} e^{\theta_{k}}} \times \frac{e^{\theta_{i}}}{\sum_{k} e^{\theta_{k}}} \nonumber \\
+    %
+        &amp;= -S_{j} \times S_{i} \nonumber
+\end{align}$$</span><!-- Has MathJax --></p>
+<p>用$L$代表交叉损失函数，则：<br><span>$$\begin{align}
+    \frac{\partial L}{\partial \theta_{i}} % 
+        &amp;= - \sum_{k} y_{k} \frac{\partial log S_{k}}{\partial \theta_{i}}  \nonumber \\
+    %
+        &amp;= - \sum_{k} y_{k} \frac{1}{S_{k}} \frac{\partial S_{k}}{\partial \theta_{i}} \nonumber \\
+    %
+        &amp;= - y_{i} (1 - S_{i}) - \sum_{k \ne i} y_{k} \frac{1}{S_{k}} (-S_{k} \times S_{i}) \nonumber \\
+    % 
+        &amp;= - y_{i} (1 - S_{i}) + \sum_{k \ne i} y_{k} S_{i} \nonumber \\
+    %
+        &amp;= - y_{i} + y_{i} S_{i} + \sum_{k \ne i} y_{k} S_{i} \nonumber \\
+    %
+        &amp;= S_{i}(\sum_{k} y_{k}) - y_{i} \nonumber
+\end{align}$$</span><!-- Has MathJax --></p>
+<p>因为$\sum<em>{k} y</em>{k} = 1$，所以：<br><span>$$\begin{align}
+    \frac{\partial L}{\partial \theta_{i}} % 
+            &amp;= S_{i} - y_{i} \nonumber
+\end{align}$$</span><!-- Has MathJax --></p>
+<h2 id="2-3-c-单个隐藏层的梯度-One-Hidden-Layer-Gradient"><a href="#2-3-c-单个隐藏层的梯度-One-Hidden-Layer-Gradient" class="headerlink" title="2.3 (c) 单个隐藏层的梯度(One Hidden Layer Gradient)"></a>2.3 (c) 单个隐藏层的梯度(One Hidden Layer Gradient)</h2><p>推导输入为$\bm{x}$，隐藏层的激活函数为sigmoid，输出层为softmax的单层圣经网络的梯度。假定one-hot标签向量为$\mathbf{y}$，损失函数为交叉熵。其中，前向传播如下：<br><span>$$\begin{align}
+    \mathbf{h} &amp;= sigmoid(\bm{xW}_{1} + \bm{b}_{1}) &amp; \hat{\bm{y}} = softmax(\bm{hW}_{2} + \bm{b}_{2}) \nonumber
+\end{align}$$</span><!-- Has MathJax --></p>
+<p><strong>Answer:</strong><br>令$f<em>{2} = \bm{xW}</em>{1} + \bm{b}<em>{1}$，$f</em>{3} = \bm{hW}<em>{2} + \bm{b}</em>{2}$;<br><span>$$\begin{align}
+    \frac{\partial J}{\partial f_{3}} %
+        &amp;= \bm{\delta}_{3} = \hat{\bm{y}} - \bm{y} \nonumber \\
+    %
+    \frac{\partial J}{\partial \bm{h}} %
+        &amp;= \bm{\delta}_{2} = \bm{\delta}_{3}\bm{W}_{2}^{T} \nonumber \\
+    %
+    \frac{\partial J}{\partial f_{2}} %
+            &amp;= \bm{\delta}_{1} = \bm{\delta}_{2} \circ \sigma&apos;(f_{2}) \nonumber \\
+    %
+    \frac{\partial J}{\partial \bm{x}} %
+        &amp;= \bm{\delta}_{1} \frac{\partial f_{2}}{\partial \bm{x}} \nonumber \\
+    %
+        &amp;= \bm{\delta}_{1}  \bm{W}_{1}^{T} \nonumber
+\end{align}$$</span><!-- Has MathJax --></p>
 <h2 id="2-4-d-参数个数-Number-of-Parameters"><a href="#2-4-d-参数个数-Number-of-Parameters" class="headerlink" title="2.4 (d) 参数个数(Number of Parameters)"></a>2.4 (d) 参数个数(Number of Parameters)</h2><p>在上面\textbf{c}中的神经网络，有多少个参数？假定输入为$D<em>{x}$维，输出为$D</em>{y}$维，隐藏层共有$H$个神经单元。</p>
-<p><strong>Answer:</strong><br>$$n<em>{W</em>{1}} &amp;= D<em>{x} \times H \nonumber \<br>    %<br>    n</em>{b<em>{1}} &amp;= H \nonumber \<br>    %<br>    n</em>{W<em>{2}} &amp;= H \times D</em>{y} \nonumber \<br>    %<br>    n<em>{b</em>{2}} &amp;= D<em>{y} \nonumber \<br>    %<br>    N &amp;= (D</em>{x} \times H) + H + (H \times D<em>{y}) + D</em>{y} \nonumber<br>$$</p>
+<p><strong>Answer:</strong><br><span>$$\begin{align}
+    n_{W_{1}} &amp;= D_{x} \times H \nonumber \\
+    %
+    n_{b_{1}} &amp;= H \nonumber \\
+    %
+    n_{W_{2}} &amp;= H \times D_{y} \nonumber \\
+    %
+    n_{b_{2}} &amp;= D_{y} \nonumber \\
+    %
+    N &amp;= (D_{x} \times H) + H + (H \times D_{y}) + D_{y} \nonumber
+\end{align}$$</span><!-- Has MathJax --></p>
 <h2 id="2-5-e-pyhton代码实现Sigmoid"><a href="#2-5-e-pyhton代码实现Sigmoid" class="headerlink" title="2.5 (e) pyhton代码实现Sigmoid"></a>2.5 (e) pyhton代码实现Sigmoid</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">import numpy as np</div><div class="line"></div><div class="line">def sigmoid(x):</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    Compute the sigmoid function for the input here.</div><div class="line"></div><div class="line">    Arguments:</div><div class="line">    x -- A scalar or numpy array.</div><div class="line"></div><div class="line">    Return:</div><div class="line">    s -- sigmoid(x)</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    s = 1.0 / (1 + np.exp(-x))</div><div class="line"></div><div class="line">    return s</div><div class="line"></div><div class="line"></div><div class="line">def sigmoid_grad(s):</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    Compute the gradient for the sigmoid function here. Note that</div><div class="line">    for this implementation, the input s should be the sigmoid</div><div class="line">    function value of your original input x.</div><div class="line"></div><div class="line">    Arguments:</div><div class="line">    s -- A scalar or numpy array.</div><div class="line"></div><div class="line">    Return:</div><div class="line">    ds -- Your computed gradient.</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    ds = s * (1 - s)</div><div class="line"></div><div class="line">    return ds</div></pre></td></tr></table></figure>
 <h2 id="2-6-f-Python实现梯度检验-Gradient-Check"><a href="#2-6-f-Python实现梯度检验-Gradient-Check" class="headerlink" title="2.6 (f) Python实现梯度检验(Gradient Check)"></a>2.6 (f) Python实现梯度检验(Gradient Check)</h2><p>为了方便debug，我们需要实现一个检验梯度的代码, 梯度检验的思想为梯度的极限定义，如下图所示：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">import numpy as np</div><div class="line">import random</div><div class="line"></div><div class="line"></div><div class="line"># First implement a gradient checker by filling in the following functions</div><div class="line">def gradcheck_naive(f, x):</div><div class="line">    &quot;&quot;&quot; Gradient check for a function f.</div><div class="line"></div><div class="line">    Arguments:</div><div class="line">    f -- a function that takes a single argument and outputs the</div><div class="line">         cost and its gradients</div><div class="line">    x -- the point (numpy array) to check the gradient at</div><div class="line">    &quot;&quot;&quot;</div><div class="line"></div><div class="line">    rndstate = random.getstate()</div><div class="line">    random.setstate(rndstate)</div><div class="line">    fx, grad = f(x) # Evaluate function value at original point</div><div class="line">    h = 1e-4        # Do not change this!</div><div class="line"></div><div class="line">    # Iterate over all indexes in x</div><div class="line">    it = np.nditer(x, flags=[&apos;multi_index&apos;], op_flags=[&apos;readwrite&apos;])</div><div class="line">    while not it.finished:</div><div class="line">        ix = it.multi_index</div><div class="line"></div><div class="line">        # Try modifying x[ix] with h defined above to compute</div><div class="line">        # numerical gradients. Make sure you call random.setstate(rndstate)</div><div class="line">        # before calling f(x) each time. This will make it possible</div><div class="line">        # to test cost functions with built in randomness later.</div><div class="line"></div><div class="line">        x[ix] += h</div><div class="line"></div><div class="line">        random.setstate(rndstate)</div><div class="line">        new_f1 = f(x)[0]</div><div class="line">        x[ix] -= 2*h</div><div class="line"></div><div class="line">        random.setstate(rndstate)</div><div class="line">        new_f2 = f(x)[0]</div><div class="line">        x[ix] += h</div><div class="line"></div><div class="line">        numgrad = (new_f1 - new_f2) / (2 * h)</div><div class="line">    </div><div class="line">        # Compare gradients</div><div class="line">        reldiff = abs(numgrad - grad[ix]) / max(1, abs(numgrad), abs(grad[ix]))</div><div class="line">        if reldiff &gt; 1e-5:</div><div class="line">            print(&quot;Gradient check failed.&quot;)</div><div class="line">            print(&quot;First gradient error found at index %s&quot; % str(ix))</div><div class="line">            print(&quot;Your gradient: %f \t Numerical gradient: %f&quot; % (</div><div class="line">                grad[ix], numgrad))</div><div class="line">            return</div><div class="line"></div><div class="line">        it.iternext() # Step to next dimension</div><div class="line"></div><div class="line">    print(&quot;Gradient check passed!&quot;)</div></pre></td></tr></table></figure>
@@ -212,10 +288,19 @@
     
 <nav id="article-nav">
   
+    <a href="/2017/08/24/14-pearson_vs_spearman/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          Pearson相关系数Vs.Spearman相关系数
+        
+      </div>
+    </a>
   
-    <a href="/2017/08/24/14-pearson_vs_spearman/" id="article-nav-older" class="article-nav-link-wrap">
+  
+    <a href="/2017/07/13/11-word2vec-based-on-gensim/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title">Pearson相关系数Vs.Spearman相关系数</div>
+      <div class="article-nav-title">基于gensim的Wiki百科中文word2vec训练</div>
     </a>
   
 </nav>
