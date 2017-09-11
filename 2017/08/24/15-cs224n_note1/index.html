@@ -11,17 +11,17 @@
   
   
   
-  <meta name="description" content="Problem 1: Softmax1.1 (a) 数值稳定性Prove: softmax的数值稳定性，即对任意的输入向量$x$和任意的常数$c$，softmax($x$) = softmax($x + c$)，$x + c$代表对向量$x$的每一个元素都加上常数$c$。其中，$$softmax(x){i} = \frac{e^{x{i}}}{\sum{j}e^{x{j}}}$$ Answer:我">
+  <meta name="description" content="Problem 1: Softmax1.1 (a) 数值稳定性Prove: softmax的数值稳定性，即对任意的输入向量$x$和任意的常数$c$，softmax($x$) = softmax($x + c$)，$x + c$代表对向量$x$的每一个元素都加上常数$c$。其中，$$softmax(x){i} = \frac{e^{x{i}}}{\sum{j}e^{x{j}}}$$">
 <meta name="keywords" content="cs224n">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CS224N - 自然语言处理-word2vec">
 <meta property="og:url" content="http://yoursite.com/2017/08/24/15-cs224n_note1/index.html">
 <meta property="og:site_name" content="League of Data">
-<meta property="og:description" content="Problem 1: Softmax1.1 (a) 数值稳定性Prove: softmax的数值稳定性，即对任意的输入向量$x$和任意的常数$c$，softmax($x$) = softmax($x + c$)，$x + c$代表对向量$x$的每一个元素都加上常数$c$。其中，$$softmax(x){i} = \frac{e^{x{i}}}{\sum{j}e^{x{j}}}$$ Answer:我">
-<meta property="og:updated_time" content="2017-09-11T12:57:08.173Z">
+<meta property="og:description" content="Problem 1: Softmax1.1 (a) 数值稳定性Prove: softmax的数值稳定性，即对任意的输入向量$x$和任意的常数$c$，softmax($x$) = softmax($x + c$)，$x + c$代表对向量$x$的每一个元素都加上常数$c$。其中，$$softmax(x){i} = \frac{e^{x{i}}}{\sum{j}e^{x{j}}}$$">
+<meta property="og:updated_time" content="2017-09-11T13:00:57.199Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS224N - 自然语言处理-word2vec">
-<meta name="twitter:description" content="Problem 1: Softmax1.1 (a) 数值稳定性Prove: softmax的数值稳定性，即对任意的输入向量$x$和任意的常数$c$，softmax($x$) = softmax($x + c$)，$x + c$代表对向量$x$的每一个元素都加上常数$c$。其中，$$softmax(x){i} = \frac{e^{x{i}}}{\sum{j}e^{x{j}}}$$ Answer:我">
+<meta name="twitter:description" content="Problem 1: Softmax1.1 (a) 数值稳定性Prove: softmax的数值稳定性，即对任意的输入向量$x$和任意的常数$c$，softmax($x$) = softmax($x + c$)，$x + c$代表对向量$x$的每一个元素都加上常数$c$。其中，$$softmax(x){i} = \frac{e^{x{i}}}{\sum{j}e^{x{j}}}$$">
   
     <link rel="alternate" href="/atom.xml" title="League of Data" type="application/atom+xml">
   
@@ -135,6 +135,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="Problem-1-Softmax"><a href="#Problem-1-Softmax" class="headerlink" title="Problem 1: Softmax"></a>Problem 1: Softmax</h1><h2 id="1-1-a-数值稳定性"><a href="#1-1-a-数值稳定性" class="headerlink" title="1.1 (a) 数值稳定性"></a>1.1 (a) 数值稳定性</h2><p><strong>Prove:</strong> softmax的数值稳定性，即对任意的输入向量$x$和任意的常数$c$，softmax($x$) = softmax($x + c$)，$x + c$代表对向量$x$的每一个元素都加上常数$c$。其中，<br>$$softmax(x)<em>{i} = \frac{e^{x</em>{i}}}{\sum<em>{j}e^{x</em>{j}}}$$</p>
+<a id="more"></a>
 <p><strong>Answer:</strong><br>我们可以通过提取因子$c$，然后进行消除进行证明，如下：</p>
 <p>$$<br>    softmax(x + c)<em>{i} &amp;= \frac{e^{x</em>{i} + c}}{\sum<em>{j} e^{x</em>{j} + c}} %<br>                         = \frac{e^{x<em>{i}} \times e^{c}}{e^{c} \times \sum</em>{j} e^{x<em>{j}}} \nonumber \<br>    %<br>                       &amp;= \frac{e^{x</em>{i}} \times \cancel{e^{c}}}{\cancel{e^{c}} \times \sum<em>{j} e^{x</em>{j}}} %<br>                        = softmax(x)_{i} \nonumber<br>$$</p>
 <h2 id="1-2-b-python程序实现Softmax"><a href="#1-2-b-python程序实现Softmax" class="headerlink" title="1.2 (b) python程序实现Softmax"></a>1.2 (b) python程序实现Softmax</h2><p>给定一个$M$行$N$列的输入矩阵，利用Sonftmax的数值稳定性计算每行的softmax:</p>
@@ -203,19 +204,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2017/08/24/14-pearson_vs_spearman/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">上一篇</strong>
-      <div class="article-nav-title">
-        
-          Pearson相关系数Vs.Spearman相关系数
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/07/13/11-word2vec-based-on-gensim/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2017/08/24/14-pearson_vs_spearman/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title">基于gensim的Wiki百科中文word2vec训练</div>
+      <div class="article-nav-title">Pearson相关系数Vs.Spearman相关系数</div>
     </a>
   
 </nav>
