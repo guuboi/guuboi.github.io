@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>CS224N - 自然语言处理知识讲解4 - Wor2Vec | League of Data</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="word2veccs224n" />
+  
+  
+  
+  
+  <meta name="description" content="基于迭代的方法 - Word2Vec我们可以尝试创建一个模型，一次性只能学习一次迭代，最终可以根据上下文语境给出一个词出现的概率；而不是像之前一样计算和存储一些庞大数据集的全部信息（可能是数10亿句）。这一方法的主要思路就是：设计一个模型，用该模型的参数来表示词向量，然后基于语料库进行训练。在每一次迭代中，我们评估模型的误差，然后对参数进行更新。我们称这种方法为‘反向传播’误差。模型和任务越简单，">
+<meta name="keywords" content="word2vec,cs224n">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS224N - 自然语言处理知识讲解4 - Wor2Vec">
+<meta property="og:url" content="http://yoursite.com/2017/09/05/16-cs224n_nlp1/index.html">
+<meta property="og:site_name" content="League of Data">
+<meta property="og:description" content="基于迭代的方法 - Word2Vec我们可以尝试创建一个模型，一次性只能学习一次迭代，最终可以根据上下文语境给出一个词出现的概率；而不是像之前一样计算和存储一些庞大数据集的全部信息（可能是数10亿句）。这一方法的主要思路就是：设计一个模型，用该模型的参数来表示词向量，然后基于语料库进行训练。在每一次迭代中，我们评估模型的误差，然后对参数进行更新。我们称这种方法为‘反向传播’误差。模型和任务越简单，">
+<meta property="og:image" content="http://yoursite.com/image/CBOW_graph.jpg">
+<meta property="og:updated_time" content="2017-09-12T13:06:32.564Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CS224N - 自然语言处理知识讲解4 - Wor2Vec">
+<meta name="twitter:description" content="基于迭代的方法 - Word2Vec我们可以尝试创建一个模型，一次性只能学习一次迭代，最终可以根据上下文语境给出一个词出现的概率；而不是像之前一样计算和存储一些庞大数据集的全部信息（可能是数10亿句）。这一方法的主要思路就是：设计一个模型，用该模型的参数来表示词向量，然后基于语料库进行训练。在每一次迭代中，我们评估模型的误差，然后对参数进行更新。我们称这种方法为‘反向传播’误差。模型和任务越简单，">
+<meta name="twitter:image" content="http://yoursite.com/image/CBOW_graph.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="League of Data" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+
+
+<header id="allheader" class="site-header" role="banner" 
+   >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" title="League of Data" rel="home"> League of Data </a>
+            
+          </h1>
+          
+          
+            <div class="site-description">HOW NOT TO BE WRONG ?</div>
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">首页</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">归档</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">关于</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-16-cs224n_nlp1" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="/image/CBOW_graph.jpg" rel="gallery_cj7hm2ytw001884w4tero25el">
+        <img src="/image/CBOW_graph.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      CS224N - 自然语言处理知识讲解4 - Wor2Vec
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2017/09/05/16-cs224n_nlp1/" class="article-date">
+	  <time datetime="2017-09-05T07:30:16.000Z" itemprop="datePublished">九月 5, 2017</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/自然语言处理/">自然语言处理</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="基于迭代的方法-Word2Vec"><a href="#基于迭代的方法-Word2Vec" class="headerlink" title="基于迭代的方法 - Word2Vec"></a>基于迭代的方法 - Word2Vec</h1><p>我们可以尝试创建一个模型，一次性只能学习一次迭代，最终可以根据上下文语境给出一个词出现的概率；而不是像之前一样计算和存储一些庞大数据集的全部信息（可能是数10亿句）。<br>这一方法的主要思路就是：设计一个模型，用该模型的参数来表示词向量，然后基于语料库进行训练。在每一次迭代中，我们评估模型的误差，然后对参数进行更新。我们称这种方法为‘反向传播’误差。模型和任务越简单，模型训练的速度越快。</p>
+<a id="more"></a>
+<p>[Collobert et al., 2011]设计NLP模型的第一步就是将每一个单词转化为向量的形式。在一些特殊任务中（命名实体识别，词性标注等），他们不仅仅训练模型的参数，还训练更好的词向量以追求更高的性能。</p>
+<p>接下来，我们主要介绍一个更简单的，更前沿的，基于概率方法的模型：word2vec。Word2vec是一个软件包，主要包括：</p>
+<p><strong>2个算法：</strong> continuous bag-of-words (CBOW)和skip-gram。CBOW旨在根据上下文窗口语境预测中间词。Skip-gram与之相反，他根据中心词预测该词的上下文语境。<br><strong>2个训练方法：</strong>negative sampling和hierarchical softmax。negative sampling通过负抽样来定义一个目标词。然而，hierarchical softmax通过使用一个高效的树结构计算所有词汇的概率来定义目标词。</p>
+<h2 id="4-1-语言模型-Language-Models"><a href="#4-1-语言模型-Language-Models" class="headerlink" title="4.1 语言模型(Language Models)"></a>4.1 语言模型(Language Models)</h2><p>首先，我们需要创建一个可以计算字符序列出现概率的模型。让我们看下下面的例子：<br>“The cat jumped over the puddle.”<br>一个好的语言模型可以赋予这个句子高的概率。因为这句话符合句法和语义，通俗一点，他是一句人话。相反，应该赋予”stock boil fish is toy”这句话低的概率，因为这句话不是人话，没有任何意义。我们可以用以下数学表达式来表示给定n个单词序列的概率：<br>$$P(w<em>{1}, w</em>{2}, \cdots, w<em>{n})$$<br>我们假定每个单词的出现时相互独立的，那么上面的一元模型的概率可以拆散为以下形式：<br>$$P(w</em>{1}, w<em>{2}, \cdots, w</em>{n}) = \prod<em>{i=1}^n P(w</em>{i})$$}</p>
+<p>然而，我们知道这有一些荒唐，因为下一个词的出现高度依赖于先前的单词序列。有可能导致那些愚蠢的，不像人话的句子被赋予的分数较高。因此，也许我们可以让序列的概率取决于序列中一个单词的成对概率和它旁边一个单词的概率。我们称之为二元语言模型(bigram model)，表示如下：<br>$$P(w<em>{1}, w</em>{2}, \cdots, w<em>{n}) = \prod</em>{i=2}^n P(w<em>{i} | w</em>{i-1})$$</p>
+<p>当然，这还是有点幼稚，因为我们只考虑一对相邻的词，而不是计算整个句子。但是，我们将会看到，这种表示方法使我们能够前行的更远。通过一个上下文大小为1的词矩阵，我们基本上能够获取这些成对词语的概率。但是，这需要计算和储存一个海量数据集的全部信息。</p>
+<p>既然我们已经明白如何理解一个拥有概率性质的字符序列，那么接下来，我们将会介绍一些可以自主学习这些概率的模型。</p>
+<h2 id="4-2-CBOW模型"><a href="#4-2-CBOW模型" class="headerlink" title="4.2 CBOW模型"></a>4.2 CBOW模型</h2><p>一种方法是把{‘The’, ‘cat’, ‘over’, ‘the’, ‘puddle’}作为上下文，来预测中心词语’jumped’。我们称这类模型为Bag of Words (CBOW)模型。其基本思路如下图：</p>
+<p><img src="/image/CBOW.jpg" alt=""></p>
+<p>让我们详细地讨论下CBOW模型。首先，我们设定一些已知的参数。这些已知参数为用于表示单词的one-hot向量。我们用$x^{(c)}$表示输入的one_hot向量（上下文），用$y^{(c)}$表示输出。在CBOW模型中，只有一个输出，所以我们称$y$为已知中心词的one-hot向量。接下来，让我们定义模型中未知的参数。</p>
+<p>我们创建两个矩阵，<span>$\mathcal{V} \in \mathbb{R}^{n\times|V|}$</span><!-- Has MathJax -->和<span>$\mathcal{U} \in \mathbb{R}^{|V|\times n}$</span><!-- Has MathJax -->。$n$为词嵌入向量的大小，<span>$\mathcal{V}$</span><!-- Has MathJax -->为输入词矩阵，其中,当$w<em>{i}$为模型的一个输入时，<span>$\mathcal{V}$</span><!-- Has MathJax -->的第$i$列为单词$w</em>{i}$的$n$维词嵌入向量。我们把这个$n\times1$向量定义为$v<em>{i}$。相似的，<span>$\mathcal{U}$</span><!-- Has MathJax -->为输出词矩阵，当$w</em>{i}$为模型的一个输出时，<span>$\mathcal{U}$</span><!-- Has MathJax -->的第$j$行为单词$w<em>{j}$的$n$维词嵌入向量。我们<span>$\mathcal{U}$</span><!-- Has MathJax -->的第$j$行定义为$u</em>{j}$。请注意：我们实际上为每个单词$w<em>{i}$学习了两个词向量(输入词向量$v</em>{i}$和输出词向量$u_{i}$)。<br><strong>CBOW模型参数：</strong><br><span>$$\begin{itemize}
+\item $w_{i}$: 词汇$V$中的单词$i$
+\item $\mathcal{V} \in \mathbb{R}^{n\times|V|}$: 输入词矩阵
+\item $v_{i}$: $\mathcal{V}$的第$i$列，单词$w_{i}$的输入词向量表示
+\item $\mathcal{U} \in \mathbb{R}^{|V|\times n}$: 输出词矩阵
+\item $u_{i}$: $\mathcal{U}$的第$i$列，单词$w_{i}$的输出词向量表示
+\end{itemize}$$</span><!-- Has MathJax --></p>
+<p>我们将模型的工作流程分解为以下几个步骤：<br><span>$$\begin{enumerate}
+\item 获取输入的one-hot向量，窗口大小为$m$ : (&lt;span&gt;$x^{(c-m)}, \hdots, x^{(c-1)}, x^{(c+1)},\hdots, x^{(c+m)} \in \mathbb{R}^{|V|}$&lt;/span&gt;&lt;!-- Has MathJax --&gt;)。&lt;br&gt;\item 我们得到输入窗口语料的词嵌入向量 (&lt;span&gt;$v_{c-m}=\mathcal{V}x^{(c-m)}$&lt;/span&gt;&lt;!-- Has MathJax --&gt;, &lt;span&gt;$v_{c-m+1}=\mathcal{V}x^{(c-m+1)}$&lt;/span&gt;&lt;!-- Has MathJax --&gt;, &lt;span&gt;$\hdots$&lt;/span&gt;&lt;!-- Has MathJax --&gt;, &lt;span&gt;$v_{c+m}=\mathcal{V}x^{(c+m)} \in \mathbb{R}^n$&lt;/span&gt;&lt;!-- Has MathJax --&gt;)&lt;br&gt;\item 求取这些向量的平均值，得到&lt;span&gt;$\hat{v} = \frac{v_{c-m}+v_{c-m+1}+... + v_{c+m}}{2m} \in \mathbb{R}^n$&lt;/span&gt;&lt;!-- Has MathJax --&gt;&lt;br&gt;\item 生成一个分数向量（score vector)：&lt;span&gt;$z=\mathcal{U}\hat{v} \in \mathbb{R}^{|V|}$&lt;/span&gt;&lt;!-- Has MathJax --&gt;。由于向量之间越相似，其点积越高，所以相似的单词将会离得更近以得到更高的分数。&lt;br&gt;\item 利用Softmax函数将分数转换为概率的形式：&lt;span&gt;$\hat{y}=\operatorname{softmax}(z) \in \mathbb{R}^{|V|}$&lt;/span&gt;&lt;!-- Has MathJax --&gt;。&lt;br&gt;\item 我们期望概率&lt;span&gt;$\hat{y} \in \mathbb{R}^{|V|}$&lt;/span&gt;&lt;!-- Has MathJax --&gt;能够与真实概率&lt;span&gt;$y \in \mathbb{R}^{|V|}$&lt;/span&gt;&lt;!-- Has MathJax --&gt;相匹配，即巧好是目标单词的one-hot向量。&lt;br&gt;\end{enumerate}&lt;br&gt;$$</span><!-- Has MathJax --><br>以上CBOW工作流程如下图：</p>
+<p><img src="/image/CBOW_graph.jpg" alt=""></p>
+<p>既然我们已经了解了当我们拥有$\mathcal{V}$和$\mathcal{U}$两个矩阵后，我们的模型是怎么工作的。那么，我们该怎么去学习获取这两个未知参数矩阵呢？这时，我们需要创建一个目标函数。通常，当我们从某种真实概率中学习概率时，我们会借助信息理论来度量两个分布之间的距离。这里，我们使用最常用的距离/损失度量，交叉熵$H(\hat{y},y)$。</p>
+<p>在离散情况下，使用交叉熵的灵感来自于下面的损失函数：<br>$$H(\hat{y},y) = -\sum_{j = 1}^{|V|} y_j \log(\hat{y}_j)$$</p>
+<p>让我们考虑下CBOW这个案例，$y$为one-hot向量。因此，上面的损失函数可以简化为：<br>$$H(\hat{y},y) = -y_c \log(\hat{y}_c)$$</p>
+<p>在这个公式中，$c$是指目标单词one-hot向量为1的索引。当我们的预测非常完美，$\hat{y}_c = 1$时，我们可以算得$H(\hat{y},y) = -1\log(1) = 0$。因此，对于一个完美的预测，不会得到惩罚或者损失。现在，让我们考虑一下相反的时候，即我们的预测很差，$\hat{y}_c = 0.01$。这时候，我们可以得到$H(\hat{y},y) = -1\log(0.01) \approx 4.605$。因此，我们可以看出对于概率分布，交叉熵为我们提供了一个很好的度量距离（误差）的方法。因此，我们把我们模型的优化目标设置为：<br><span>$$\begin{align*}
+\operatorname{minimize} J &amp;= -\log P(w_{c}|w_{c-m}, \hdots, w_{c-1}, w_{c+1}, \hdots, w_{c+m})\\
+&amp;= -\log P(u_{c}|\hat{v})\\
+&amp;= -\log \frac{\exp(u_{c}^{T}\hat{v})}{\sum_{j=1}^{|V|}\exp(u_{j}^{T}\hat{v})}\\
+&amp;= -u_{c}^{T}\hat{v}+\log \sum_{j=1}^{|V|}\exp(u_{j}^{T}\hat{v})\\
+\end{align*}$$</span><!-- Has MathJax --></p>
+<p>我们采用随机梯度下降法（stochastic gradient descent）去更新所有相关的词向量$u<em>{c}$和$v</em>{j}$。</p>
+<h2 id="4-3-Skip-Gram模型"><a href="#4-3-Skip-Gram模型" class="headerlink" title="4.3 Skip-Gram模型"></a>4.3 Skip-Gram模型</h2><p>另一种方法是创建一个模型，给定一个中心单词’jumped’，该模型能够预测周边单词（上下文）：’The’, ‘cat’, ‘over’, ‘the’, ‘puddle’。这里，我们称单词’jumped’为语境（context）。我们称这类模型为Skip-Gram模型，其基本思路如下图：</p>
+<p><img src="/image/Skip-Gram.jpg" alt=""></p>
+<p>Skip—Gram模型和CBOW模型很相似，不过这里我们把$x$和$y$进行了交换，即CBOW中的$x$现在变为了$y$,反之亦然。我们用$x$表示输入的one-hot向量（中心单词），尽管这里只有一个单词。用$y^{(j)}$表示输出向量。$\mathcal{V}$和$\mathcal{U}$的定义和CBOW中的定义相同。</p>
+<p>我们把Skip-Gram模型的工作流程拆分为以下6个步骤：<br><span>$$\begin{enumerate}
+\item 获取中心单词的one-hot输入向量&lt;span&gt;$x \in \mathbb{R}^{|V|}$&lt;/span&gt;&lt;!-- Has MathJax --&gt;。&lt;br&gt;\item 求取中心单词的词嵌入向量&lt;span&gt;$v_{c} =\mathcal{V}x \in \mathbb{R}^n$&lt;/span&gt;&lt;!-- Has MathJax --&gt;。&lt;br&gt;%\item Generate $2m$ score vectors, $u&lt;em&gt;{c-m}, \hdots, u&lt;/em&gt;{c-1}, u&lt;em&gt;{c+1}, \hdots, u&lt;/em&gt;{c+m}$ using $u=\mathcal{U}v_{c}$&lt;br&gt;\item 计算分数向量&lt;span&gt;$z = \mathcal{U} v_{c}$&lt;/span&gt;&lt;!-- Has MathJax --&gt;。&lt;br&gt;\item 通过Softmax函数惊分数向量转换为概率&lt;span&gt;$\hat{y} = \operatorname{softmax}(z)$&lt;/span&gt;&lt;!-- Has MathJax --&gt;。注意：&lt;span&gt;$\hat{y}_{c-m}, \hdots, \hat{y}_{c-1}, \hat{y}_{c+1}, \hdots, \hat{y}_{c+m}$&lt;/span&gt;&lt;!-- Has MathJax --&gt;为每个目标单词的概率。&lt;br&gt;\item 我们期望计算出的概率和真实概率&lt;span&gt;$y^{(c-m)}, \hdots, y^{(c-1)}, y^{(c+1)}, \hdots, y^{(c+m)}$&lt;/span&gt;&lt;!-- Has MathJax --&gt;相匹配。&lt;br&gt;\end{enumerate}&lt;br&gt;$$</span><!-- Has MathJax --></p>
+<p>以上Skip-Gram工作流程如下图：</p>
+<p><img src="/image/Skip-Gram_graph.jpg" alt=""></p>
+<p>正如CBOW模型那样，我们同样也需要定义一个目标函数来衡量我们的模型。最重要的一个区别是，在Skip-Gram模型中我们引入朴素贝叶斯假设来分解概率。简单地说，就是一个强条件独立假设。换句话说，给定中心单词，所有的输出单词完全相互独立。</p>
+<span>$$\begin{align*}
+\operatorname{minimize} J &amp;= -\log P(w_{c-m}, \hdots, w_{c-1}, w_{c+1}, \hdots, w_{c+m}|w_{c})\\
+&amp;= -\log \prod_{j=0, j\neq m}^{2m} P(w_{c-m+j}|w_{c})\\
+&amp;= -\log \prod_{j=0, j\neq m}^{2m} P(u_{c-m+j}|v_{c})\\
+&amp;= -\log \prod_{j=0, j\neq m}^{2m} \frac{\exp(u_{c-m+j}^{T}v_{c})}{\sum_{k=1}^{|V|}\exp(u_{k}^{T}v_{c})}\\
+&amp;= -\sum_{j=0, j\neq m}^{2m} u_{c-m+j}^{T}v_{c} + 2m\log \sum_{k=1}^{|V|}\exp(u_{k}^{T}v_{c})\\
+\end{align*}$$</span><!-- Has MathJax -->
+<p>通过目标函数，我们计算未知参数的相应梯度，以及在每次迭代中通过随机梯度下降法更新这些未知参数。<br>注意：</p>
+<span>$$\begin{align*}
+J &amp;= -\sum_{j=0, j\neq m}^{2m} \log P(u_{c-m+j}|v_{c})\\
+&amp;= \sum_{j=0, j\neq m}^{2m} H(\hat{y}, y_{c-m+j})
+\end{align*}$$</span><!-- Has MathJax -->
+<p>其中，<span>$H(\hat{y}, y_{c-m+j})$</span><!-- Has MathJax -->为预测概率$\hat{y}$和one-hot向量$y_{c-m+j}$的交叉熵。</p>
+<p>在Skip-Gram模型中，只输出了一个概率向量。Skip-Gram模型同等对待每个上下文单词：模型计算上下文每一个单词的出现概率</p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/自然语言处理/">自然语言处理</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cs224n/">cs224n</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/word2vec/">word2vec</a></li></ul>
+
+      
+        
+	<div id="comment">
+	
+	<!-- 多说评论框 start -->
+	 <div class="ds-thread" data-thread-key="/2017/09/05/16-cs224n_nlp1/" data-title="CS224N - 自然语言处理知识讲解4 - Wor2Vec" data-url="http://yoursite.com/2017/09/05/16-cs224n_nlp1/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"league-of-data"};
+	  (function() {
+	    var ds = document.createElement('script');
+	    ds.type = 'text/javascript';ds.async = true;
+	    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+	    ds.charset = 'UTF-8';
+	    (document.getElementsByTagName('head')[0] 
+	     || document.getElementsByTagName('body')[0]).appendChild(ds);
+	  })();
+	  </script>
+	<!-- 多说公共JS代码 end -->
+	
+	</div>
+	<link rel="stylesheet" href="/css/comment.css">
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/09/10/15-cs224n_note1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          CS224N - 自然语言处理 - word2vec
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/08/24/14-pearson_vs_spearman/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">Pearson相关系数Vs.Spearman相关系数</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基于迭代的方法-Word2Vec"><span class="nav-number">1.</span> <span class="nav-text">基于迭代的方法 - Word2Vec</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-语言模型-Language-Models"><span class="nav-number">1.1.</span> <span class="nav-text">4.1 语言模型(Language Models)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-CBOW模型"><span class="nav-number">1.2.</span> <span class="nav-text">4.2 CBOW模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-Skip-Gram模型"><span class="nav-number">1.3.</span> <span class="nav-text">4.3 Skip-Gram模型</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2017 League of Data All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>
